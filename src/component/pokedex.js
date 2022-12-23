@@ -50,19 +50,9 @@ export default function Pokedex() {
     await fetch(`http://localhost:5000/record/${id}`, {
       method: "DELETE",
     });
-    /*async function Search() {
-      await fetch(`http://localhost:5000/record/`)
-        .then((res) => res.json())
-        .then((data) => {
-          pokemons = data.map((pokemon) => {
-            return pokemon;
-          });
-        });
-    }*/
 
     const newRecords = records.filter((el) => el._id !== id);
     setRecords(newRecords);
-    // console.log("oiii", records[0].name);
   }
 
   function recordList() {
@@ -83,13 +73,13 @@ export default function Pokedex() {
       <h3>Record List - My pokedex</h3>
       <input
         type="text"
-        placeholder="rechercher une note grace au Titre/Description..."
+        placeholder="rechercher avec NOM."
         className="form-control"
         onChange={(e) => {
           setSearch(e.target.value);
         }}
       />
-      <button /*</div>onClick={Search}*/>Search</button>
+      <button>Search</button>
 
       <table className="table table-striped" style={{ marginTop: 20 }}>
         <tr key={records._id}>

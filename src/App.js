@@ -50,51 +50,19 @@ function App() {
       .catch((err) => console.error(err));
   }, [url.current]);
 
-  /*useEffect(() => {
-    for (i === 0; i <= 22; i++) {
-      fetch(`https://pokeapi.co/api/v2/pokemon/${i}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setImage(data.sprites.front_default);
-          console.log(data);
-          console.log("affichage ", data.id);
-          console.log("Affichage type ", data.types[0].type.name);
-          setTypes(data.types[0].type.name);
-
-          setId(data.id);
-          setPokemon2(data);
-        })
-        .then(setTypes())
-        .catch((err) => console.error(err));
-    }
-  }, [i]);*/
-
   useEffect(() => {
     pokemon.map((poke, index) =>
       fetch(poke.url)
         .then((res) => res.json())
         .then((data) => {
-          //setImage((current) => [...current, data.sprites.front_default]);
           console.log(data);
-          //setId(data.id);
 
           console.log("affichage ID ", data.id);
-          //console.log("voir url", poke.url);
-          //setId(pokemon.push(data.id));
+
           let i = 0;
-          //let tab = pokemon.push(data.id);
-          //console.log(" tableau pokemon", pokemon);
 
           setPokemon2(data);
           let test = 0;
-          //pokemon.map((pokemon1, i) => (
-          /*data.types.map(
-            (e, ind) => (
-              console.log("test", e, ind),
-              //test = ;
-              setTypes(e.type.name)
-            )
-          );*/
 
           let res = "";
           poke.new_types = [];
@@ -104,55 +72,16 @@ function App() {
             res = data.types[i].type.name;
             console.log("Affichage type ", data.types[i].type.name);
             poke.new_types.push(data.types[i].type.name);
-            //pokemon.push(data.types[i].type.name);
-            //setTypes(res);
           }
           poke.new_id.push(data.id);
           poke.new_image.push(data.sprites.front_default);
-          //setId(data.id);
         })
         .then(setImage([]))
 
         .catch((err) => console.error(err))
     );
   }, [pokemon]);
-  /*function Ajouter() {
-    if (inputTodo.trim().length == 0) {
-      return null;
-    }
-    let tableauAdded = [...todos];
-    let id = Date.now();
-    tableauAdded.push(inputTodo.trim());
-    setTodos(tableauAdded);
-    setInputTodo("");
-    console.log("tableau todos: ", tableauAdded);
-    const newItems = JSON.stringify([...tableauAdded]);
-    localStorage.setItem("myItems", newItems);
-    //console.log("set todos:", setTodos);
 
-    //return tableautest;
-  }*/
-  /*function Add() {
-    console.log("selected", TableauAjouterPoke);
-    const handleClick = event => {
-      console.log(event.currentTarget.id);
-    }*/
-  /*if (inputTodo.trim().length == 0) {
-    return null;
-  }
-  let tableauAdded = [...todos];
-  let id = Date.now();
-  tableauAdded.push(inputTodo.trim());
-  setTodos(tableauAdded);
-  setInputTodo("");
-  console.log("tableau todos: ", tableauAdded);
-  const newItems = JSON.stringify([...tableauAdded]);
-  localStorage.setItem("myItems", newItems);
-  //console.log("set todos:", setTodos);*/
-
-  //return tableautest;
-
-  //let TableauAjouterPoke = [];
   const handleClick = (event) => {
     //event.currentTarget.
 
@@ -162,23 +91,9 @@ function App() {
       console.log("ONCLICK ggg", TableauAjouterPoke);
     }
   };
-  /*const Test = (id) => {
-    console.log("voici le test de l id", id - 1);
-  };*/
 
-  // This function will handle the submission.
   const Test = async (id) => {
-    // async function onSubmit(e) {
-    //e.preventDefault();
     var elt = this;
-
-    // id de l'element
-
-    //var idElt = this.getAttribute("id");
-
-    // When a post request is sent to the create url, we'll add a new record to the database.
-
-    //console.log("valeur", e.currentTarget.id);
     await fetch("http://localhost:5000/record/add", {
       method: "POST",
       headers: {
@@ -190,20 +105,15 @@ function App() {
         new_types: [pokemon[id - 1].new_types],
         new_image: [pokemon[id - 1].new_image],
       }),
-      //JSON.stringify(newPerson),
     }).catch((error) => {
       window.alert(error);
       return;
     });
 
-    //setForm({ name: "", position: "", level: "" });
     navigate("/");
   };
 
-  //pokemon.url
-  //console.log(pokemon);
   return (
-    // FAIRE UN .MAP DANS UN .MAP AUR POKEMON.URL
     <div className="container">
       <h2>Chose you pokemons ;)</h2>
       <ul>
@@ -245,8 +155,5 @@ function App() {
       <br />
     </div>
   );
-  //} catch (error) {
-  //  console.log(error);
-  //}
 }
 export default App;
