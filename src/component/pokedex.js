@@ -50,6 +50,15 @@ export default function Pokedex() {
     await fetch(`http://localhost:5000/record/${id}`, {
       method: "DELETE",
     });
+    /*async function Search() {
+      await fetch(`http://localhost:5000/record/`)
+        .then((res) => res.json())
+        .then((data) => {
+          pokemons = data.map((pokemon) => {
+            return pokemon;
+          });
+        });
+    }*/
 
     const newRecords = records.filter((el) => el._id !== id);
     setRecords(newRecords);
@@ -80,6 +89,8 @@ export default function Pokedex() {
           setSearch(e.target.value);
         }}
       />
+      <button /*</div>onClick={Search}*/>Search</button>
+
       <table className="table table-striped" style={{ marginTop: 20 }}>
         <tr key={records._id}>
           {recordList()

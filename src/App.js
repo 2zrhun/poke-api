@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import Pokedex from "./component/pokedex";
 
+import "./App.css";
+
 function App() {
   const [pokemon, setPokemon] = useState([]);
   const [pokemon2, setPokemon2] = useState([]);
@@ -202,63 +204,45 @@ function App() {
   //console.log(pokemon);
   return (
     // FAIRE UN .MAP DANS UN .MAP AUR POKEMON.URL
-    <div>
-      <h2>HEADER</h2>
+    <div className="container">
+      <h2>Chose you pokemons ;)</h2>
       <ul>
         {pokemon.map(
           (pokemon1, i) => (
-            //pokemon2.map((poke2, index) => (
             <li key={i}>
               {" "}
-              <br></br>
-              {""}
-              {pokemon1.new_id}
-              <br></br>
-              {"name:"}
-              {pokemon1.name} <br></br>
-              {pokemon1.url}
-              <br></br>
-              {JSON.stringify(pokemon1.new_types)}
-              <br></br>
-              <button
-                id={pokemon1.new_id}
-                onClick={() => Test(pokemon1.new_id)}
-              >
-                Add To pokedex
-              </button>
-              <br></br>
-              <img src={pokemon1.new_image} alt="dracafeu" />
-              <hr></hr>
+              <div className="row">
+                <div className="column">
+                  <div className="card">
+                    id#<b> {pokemon1.new_id}</b>
+                    <img src={pokemon1.new_image} alt="dracafeu" />
+                    <img className="back" src="../image/download.png" />
+                    <br></br>
+                    {"name:"}
+                    <b>{pokemon1.name}</b>
+                    <br></br>
+                    Type: <b>{JSON.stringify(pokemon1.new_types)}</b>
+                    <br></br>
+                  </div>
+                  <button
+                    id={pokemon1.new_id}
+                    onClick={() => Test(pokemon1.new_id)}
+                  >
+                    Add To pokedex
+                  </button>
+                </div>
+              </div>
             </li>
           )
           //))
         )}
-        <h3>TEST FOR EVERY POKE</h3>
 
         {console.log("test !", pokemon2.id)}
-        {/*pokemon2.map(
-          (poke2, index) => (
-            // pokemon2.map((poke2, index) => (
-            <li key={index}>
-              {" "}
-              <br></br>
-              {poke2.id}
-              {console.log("test2", poke2.id)}
-              <br></br>
-              {""} <br></br>
-              <br></br>
-              <hr></hr>
-            </li>
-          )
-          //))
-          //pokemon.map((e) => console.log(e))
-          )*/}
       </ul>
 
       {url.previous && <button onClick={previous}> Previous</button>}
       {url.next && <button onClick={next}>next</button>}
       <br />
-      <img src={Image} alt="dracafeu" />
     </div>
   );
   //} catch (error) {
