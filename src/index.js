@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import Header from "./component/Header";
 import Pokedex from "./component/pokedex";
+import Connexion from "./component/connexion";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
@@ -18,6 +19,7 @@ root.render(
         <Routes>
           <Route path="/record" element={<Pokedex />} />
           <Route path="/pokemons" element={<App />} />
+          <Route path="/connexion" element={<Connexion />} />
         </Routes>
       </BrowserRouter>
     </div>
