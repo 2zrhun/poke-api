@@ -35,8 +35,11 @@ function Connexion() {
         alert(response.data.message);
 
         const saved_token = JSON.stringify(response.data.token);
+        const saved_UserId = response.data.userId;
         localStorage.setItem("Saved_Token", saved_token);
+        localStorage.setItem("Saved_UserId", saved_UserId);
         console.log("voici la reponse", response.data.message);
+        console.log("Voici son id ", response.data.userId);
       }
     });
     setPiece("4");

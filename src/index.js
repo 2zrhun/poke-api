@@ -5,6 +5,7 @@ import App from "./App";
 import Header from "./component/Header";
 import Pokedex from "./component/pokedex";
 import Connexion from "./component/connexion";
+import Pokedex2 from "./component/pokedex2";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
@@ -17,9 +18,17 @@ root.render(
       <Header />
       <BrowserRouter>
         <Routes>
-          <Route path="/record" element={<Pokedex />} />
+          <Route
+            path={`record/${localStorage.getItem("Saved_UserId")}`}
+            element={<Pokedex />}
+          />
           <Route path="/pokemons" element={<App />} />
           <Route path="/connexion" element={<Connexion />} />
+
+          <Route
+            path={`pokedex2/${localStorage.getItem("Saved_UserId")}`}
+            element={<Pokedex2 />}
+          />
         </Routes>
       </BrowserRouter>
     </div>

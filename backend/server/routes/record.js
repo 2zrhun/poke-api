@@ -19,21 +19,48 @@ const ObjectId = require("mongodb").ObjectId;
 /*recordRoutes.route("/firstsave").get(function (req, res) {
   const first_saved = new dbo({ id: id, name: name, types: types });
 });*/
+const { FifoMatchmaker } = require("matchmaking");
+recordRoutes.route("/getFight").get(function (req, res) {
+  function runGame(players) {
+    console.log("Game started with:");
+    console.log(players);
+  }
+
+  let mm = new FifoMatchmaker(runGame, { checkInterval: 2000 });
+
+  let player1 = { id: 1 };
+  let player2 = { id: 2 };
+
+  // Players join match queue
+  mm.push(player1);
+  mm.push(player2);
+
+  // When there are enough players, runGame will be called
+  // Game started with:
+  // [ {id:1}, {id:2} ]
+});
 
 // This section will help you get a list of all the records.
-recordRoutes.route("/record").get(function (req, res) {
+recordRoutes.route("/record/:id").get(function (req, res) {
+  let UserId = req.params.id;
   let db_connect = dbo.getDb("my_poke");
+  console.log("poke parrr id", UserId);
   db_connect
     .collection("records")
-    .find({})
+    .find({ UserId: ObjectId(UserId) })
     .toArray(function (err, result) {
       if (err) throw err;
       res.json(result);
+      //console.log("this is the results!!", result);
     });
+  /*db_connect.collection("records").findOne(UserId, function (err, result) {
+    if (err) throw err;
+    res.json(result);
+  });*/
 });
 
 // This section will help you get a single record by id
-recordRoutes.route("/record/:id").get(function (req, res) {
+recordRoutes.route("/recordd/:id").get(function (req, res) {
   //<App />;
   let db_connect = dbo.getDb("my_poke");
   let myquery = { _id: ObjectId(req.params.id) };
@@ -44,20 +71,24 @@ recordRoutes.route("/record/:id").get(function (req, res) {
 });
 
 // This section will help you create a new record.
-recordRoutes.route("/record/add").post(function (req, response) {
+recordRoutes.route("/record/add/:id").post(function (req, response) {
   // <App />;
   //const name=props.name
   let db_connect = dbo.getDb();
+  //let myquery = { _id: ObjectId(req.params.id) };
+
   let myobj = {
+    UserId: ObjectId(req.params.id),
     new_id: req.body.new_id,
     name: req.body.name,
     new_types: req.body.new_types,
     new_image: req.body.new_image,
   };
+  console.log("the new", myobj.UserId);
   db_connect.collection("records").insertOne(myobj, function (err, res) {
     if (err) throw err;
     response.json(res);
-    console.log("voici l erreur", err);
+    console.log("voici l erreurrr", err);
   });
 });
 
@@ -90,6 +121,19 @@ recordRoutes.route("/connexion").post(function (req, response) {
   });
 });
 recordRoutes.route("/connexion/verification").post(function (req, response) {
+  //const user = await User.findOne({ username: username });
+
+  //res.status(200).json({ username: username });
+  const username = req.headers.username;
+  //const data = req.body.data;
+
+  /*if (!username) {
+    //response.status(401).send("Connecte toi first");
+    return response.status(200).send({
+      message: "Connecter vous d'abord!",
+    });
+  }*/
+  // console.log("user", req);
   const rounds = 1;
 
   let db_connect = dbo.getDb();
@@ -103,25 +147,24 @@ recordRoutes.route("/connexion/verification").post(function (req, response) {
       console.error(err);
       return;
     }
-    console.log("hashage lors de la connexion ! ", hash);
+    //console.log("hashage lors de la connexion ! ", hash);
     let new_obj = {
       username: req.body.username,
       password: hash,
     };
-    console.log("recuperer ce qu il ya dans bdd", myobj);
+    //console.log("recuperer ce qu il ya dans bdd", myobj);
     const user = db_connect
       .collection("user")
       .findOne({ username: myobj.username }, function (err, result) {
+        console.log("GETING the Id", result._id);
         if (err) throw err;
-        //console.log("testt", result.password);
-        //response.json(result);
+
         if (myobj.username != result.username) {
           response.send({ message: "wrong username/password combination !" });
         }
 
         bcrypt.compare(myobj.password, result.password, (err, res) => {
           if (result.length > 0) {
-            //response.send(result);
             response.send({ message: "You are successfully connected  !" });
             console.log("l'utilisateur existe ");
           }
@@ -144,8 +187,10 @@ recordRoutes.route("/connexion/verification").post(function (req, response) {
               message: "vous etes BIEN connecte !",
               username: result.username,
               token: token,
+              userId: result._id,
             });
-          } else {
+          }
+          if (res == false) {
             response.send({ message: "wrong username/password combination !" });
             console.log("nom d'utilisateur ou mot de passe incorrect");
           }

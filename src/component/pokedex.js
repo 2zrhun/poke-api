@@ -29,7 +29,9 @@ export default function Pokedex() {
   // This method fetches the records from the database.
   useEffect(() => {
     async function getRecords() {
-      const response = await fetch(`http://localhost:5000/record/`);
+      const response = await fetch(
+        `http://localhost:5000/record/${localStorage.getItem("Saved_UserId")}`
+      );
 
       if (!response.ok) {
         const message = `An error occurred: ${response.statusText}`;
@@ -53,6 +55,17 @@ export default function Pokedex() {
 
     const newRecords = records.filter((el) => el._id !== id);
     setRecords(newRecords);
+  }
+
+  async function Fight() {
+    const response2 = await fetch("http://localhost:5000/getFight", {
+      method: "GET",
+    });
+    if (!response2.ok) {
+      const message = `An error occurred: ${response2.statusText}`;
+      window.alert(message);
+      return;
+    }
   }
 
   function recordList() {
@@ -99,11 +112,11 @@ export default function Pokedex() {
             })
             .map((note, indice) => (
               <tr key={"notes-" + indice}>
-                <td>{note.props.record.new_id[0]}</td>
-                <td>{note.props.record.name[0]}</td>
-                <td>{note.props.record.new_types[indice]}</td>
+                <td>{note.props.record.new_id}</td>
+                <td>{note.props.record.name}</td>
+                <td>{note.props.record.new_types}</td>
                 <td>
-                  <img src={note.props.record.new_image[0]} />
+                  <img src={note.props.record.new_image} />
                 </td>
                 <button
                   className="btn btn-link"
@@ -117,14 +130,7 @@ export default function Pokedex() {
               </tr>
             ))}
         </tr>
-        <thead>
-          <tr>
-            <th>id</th>
-            <th>Name</th>
-            <th>types</th>
-            <th>images</th>
-          </tr>
-        </thead>
+        <button onClick={Fight}>Fight</button>
       </table>
     </div>
   );

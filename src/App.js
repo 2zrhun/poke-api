@@ -9,6 +9,7 @@ function App() {
   const [pokemon, setPokemon] = useState([]);
   const [pokemon2, setPokemon2] = useState([]);
   const [selectedPokemon, setSelectedPokemon] = useState([]);
+  const [random_pokeid, setrandom_pokeid] = useState();
   const [url, setUrl] = useState({
     current: "https://pokeapi.co/api/v2/pokemon/",
     next: null,
@@ -73,6 +74,9 @@ function App() {
             console.log("Affichage type ", data.types[i].type.name);
             poke.new_types.push(data.types[i].type.name);
           }
+          let min = Math.ceil(1);
+          let max = Math.floor(5);
+          //data.id = [Math.floor(Math.random() * (max - min) + min)];
           poke.new_id.push(data.id);
           poke.new_image.push(data.sprites.front_default);
         })
@@ -112,10 +116,13 @@ function App() {
 
     navigate("/");
   };
+  let min = Math.ceil(1);
+  let max = Math.floor(5);
+  //setrandom_pokeid([Math.floor(Math.random() * (max - min) + min)]);
 
   return (
     <div className="container">
-      <h2>Chose you pokemons ;)</h2>
+      <h2>Chose you pokemons</h2>
       <ul>
         {pokemon.map(
           (pokemon1, i) => (
