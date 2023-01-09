@@ -26,14 +26,14 @@ recordRoutes.route("/getFight").get(function (req, res) {
     console.log(players);
   }
 
-  let mm = new FifoMatchmaker(runGame, { checkInterval: 2000 });
+  let matchmaker = new FifoMatchmaker(runGame, { checkInterval: 2000 });
 
   let player1 = { id: 1 };
   let player2 = { id: 2 };
 
   // Players join match queue
-  mm.push(player1);
-  mm.push(player2);
+  matchmaker.push(player1);
+  matchmaker.push(player2);
 
   // When there are enough players, runGame will be called
   // Game started with:
