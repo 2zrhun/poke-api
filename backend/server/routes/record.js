@@ -25,63 +25,99 @@ const matchmaker = require("simple-matchmaker");
 
 recordRoutes.route("/getFight/:id").get(function (req, res) {
   let db_connect = dbo.getDb("my_poke");
-  //console.log("poke parrr id", UserId);
+  let myId = req.params.id;
+
   let myquery = { isbool: true };
-  db_connect.collection("user").findOne(myquery, function (err, result) {
-    if (err) throw err;
-    console.log("BOOL for matchmaking", result);
-    console.log("BOOL for matchmaking ID :", JSON.stringify(result._id));
-    console.log("BOOL for matchmaking NAME : ", result.username);
-    let mquery2 = { UserId: ObjectId(result._id) };
-
-    let matchmaker = new FifoMatchmaker(runGame, { checkInterval: 2000 });
-
-    db_connect
-      .collection("records")
-      .find({ UserId: ObjectId(result._id) })
-      .toArray(function (err, result2) {
+  db_connect
+    .collection("user")
+    .findOne(
+      { isbool: true, _id: { $ne: ObjectId(myId) } },
+      function (err, result) {
+        let player1 = { id: req.params.id };
         if (err) throw err;
-        // res.json(result);
-        console.log("Result2", result2);
-      });
-    //return result;
+        console.log("BOOL for matchmaking", result);
+        console.log("BOOL for matchmaking ID :", JSON.stringify(result._id));
+        console.log("BOOL for matchmaking NAME : ", result.username);
 
-    let player1 = { id: req.params.id };
-    let player2 = { id: JSON.stringify(result._id) };
+        let mquery2 = { UserId: ObjectId(result._id) };
 
-    // Players join match queue
-    matchmaker.push(player1);
-    matchmaker.push(player2);
+        db_connect
+          .collection("records")
+          .find({ UserId: ObjectId(result._id) })
+          .toArray(function (err, result2) {
+            if (err) throw err;
+            // res.json(result);
+            let i = 0;
+            let hpPlayer2 = [];
+            let AttackPlayer2 = [];
+            console.log("ss", result2[1].hp);
+            for (i == 0; i < result2.length; i++) {
+              hpPlayer2.push(result2[i].hp);
+              AttackPlayer2.push(result2[i].attack);
+            }
+            console.log("PUSHING EVERY HP ", hpPlayer2);
+            console.log("PUSHING EVERY Attack", AttackPlayer2);
+            // console.log("ADVERSAIRE", result2);
+            // console.log("HP ADVERSAIRE", result2[0].hp);
+            ///////////////////////////////////////////////////////////////////
+            db_connect
+              .collection("records")
+              .find({ UserId: ObjectId(myId) })
+              .toArray(function (err, result2) {
+                if (err) throw err;
+                // res.json(result);
+                let i = 0;
+                let hpPlayer1 = [];
+                let AttackPlayer1 = [];
+                console.log("ss", result2[1].hp);
+                for (i == 0; i < result2.length; i++) {
+                  hpPlayer1.push(result2[i].hp);
+                  AttackPlayer1.push(result2[i].attack);
+                }
+                console.log("HP 2", hpPlayer1);
+                console.log("ATTACK", AttackPlayer1);
+                let player2 = { id: JSON.stringify(result._id) };
 
-    let players = [];
-    players.push(player1);
-    players.push(player2);
-    console.log("Players table !", players);
+                let players = [];
+                players.push(player1);
+                players.push(player2);
 
-    function runGame(players) {
-      console.log("Game started with:", players);
-      console.log(player1, player2);
-    }
+                function runGame(players) {
+                  console.log(
+                    "Game started with:",
+                    players,
+                    "and",
+                    hpPlayer1,
+                    hpPlayer2
+                  );
+                  console.log(player1, player2);
+                }
+                function getPlayerKey(player1, player2) {
+                  //console.log("the ids of players", player1.id, player2.id);
+                  return player1.id, player2.id;
+                }
+                let cnt = constructor(
+                  runGame(players),
+                  getPlayerKey(player1, player2)
+                );
+                //console.log("the constructor is working");
 
-    function getPlayerKey(player1, player2) {
-      console.log("the ids of players", player1.id, player2.id);
-      return player1.id, player2.id;
-    }
-    let cnt = constructor(runGame(players), getPlayerKey(player1, player2));
-    //console.log("the constructor is working");
+                let mm = new FifoMatchmaker(cnt, { checkInterval: 2000 });
+                //mm.push(player1);
+                // mm.push(player2);
+                console.log("MM:", mm);
+              });
 
-    let mm = new FifoMatchmaker(cnt, { checkInterval: 2000 });
-    //mm.push(player1);
-    // mm.push(player2);
-    console.log("MM:", mm);
-    /*return response.status(200).send({
-      message: "vous etes BIEN connecte !",
-      username: result.username,
-      token: token,
-      userId: result._id,
-    });*/
-    //console.log("mm.push:", mm.getKey);
-  });
+            /*return response.status(200).send({
+            message: "vous etes BIEN connecte !",
+            username: result.username,
+            token: token,
+            userId: result._id,
+          });*/
+            //console.log("mm.push:", mm.getKey);
+          });
+      }
+    );
 });
 
 // This section will help you get a list of all the records.
