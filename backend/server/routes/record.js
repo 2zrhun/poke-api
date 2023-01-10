@@ -19,25 +19,63 @@ const ObjectId = require("mongodb").ObjectId;
 /*recordRoutes.route("/firstsave").get(function (req, res) {
   const first_saved = new dbo({ id: id, name: name, types: types });
 });*/
+
 const { FifoMatchmaker } = require("matchmaking");
-recordRoutes.route("/getFight").get(function (req, res) {
-  function runGame(players) {
-    console.log("Game started with:");
-    console.log(players);
-  }
+const matchmaker = require("simple-matchmaker");
 
-  let mm = new FifoMatchmaker(runGame, { checkInterval: 2000 });
+recordRoutes.route("/getFight/:id").get(function (req, res) {
+  let db_connect = dbo.getDb("my_poke");
+  //console.log("poke parrr id", UserId);
+  let myquery = { isbool: true };
+  db_connect.collection("user").findOne(myquery, function (err, result) {
+    if (err) throw err;
+    console.log("BOOL for matchmaking", result);
+    console.log("BOOL for matchmaking ID :", JSON.stringify(result._id));
+    console.log("BOOL for matchmaking NAME : ", result.username);
+    let mquery2 = { UserId: ObjectId(result._id) };
 
-  let player1 = { id: 1 };
-  let player2 = { id: 2 };
+    db_connect
+      .collection("records")
+      .find({ UserId: ObjectId(result._id) })
+      .toArray(function (err, result2) {
+        if (err) throw err;
+        // res.json(result);
+        console.log("Result2", result2);
+      });
+    //return result;
 
-  // Players join match queue
-  mm.push(player1);
-  mm.push(player2);
+    let player1 = { id: req.params.id };
+    let player2 = { id: JSON.stringify(result._id) };
 
-  // When there are enough players, runGame will be called
-  // Game started with:
-  // [ {id:1}, {id:2} ]
+    let players = [];
+    players.push(player1);
+    players.push(player2);
+    console.log("Players table !", players);
+
+    function runGame(players) {
+      console.log("Game started with:", players);
+      console.log(player1, player2);
+    }
+
+    function getPlayerKey(player1, player2) {
+      console.log("the ids of players", player1.id, player2.id);
+      return player1.id, player2.id;
+    }
+    let cnt = constructor(runGame(players), getPlayerKey(player1, player2));
+    //console.log("the constructor is working");
+
+    let mm = new FifoMatchmaker(cnt, { checkInterval: 2000 });
+    //mm.push(player1);
+    // mm.push(player2);
+    console.log("MM:", mm);
+    /*return response.status(200).send({
+      message: "vous etes BIEN connecte !",
+      username: result.username,
+      token: token,
+      userId: result._id,
+    });*/
+    //console.log("mm.push:", mm.getKey);
+  });
 });
 
 // This section will help you get a list of all the records.
@@ -83,6 +121,9 @@ recordRoutes.route("/record/add/:id").post(function (req, response) {
     name: req.body.name,
     new_types: req.body.new_types,
     new_image: req.body.new_image,
+    isbool: Boolean(false),
+    hp: req.body.hp,
+    attack: req.body.attack,
   };
   console.log("the new", myobj.UserId);
   db_connect.collection("records").insertOne(myobj, function (err, res) {
@@ -100,16 +141,19 @@ recordRoutes.route("/connexion").post(function (req, response) {
   let myobj = {
     username: req.body.username,
     password: req.body.password,
+    isbool: Boolean(false),
   };
   bcrypt.hash(myobj.password, rounds, (err, hash) => {
     if (err) {
       console.error(err);
       return;
     }
+    console.log("myBoolean", myobj.isbool);
     console.log("voici le hashage ! ", hash);
     let new_obj = {
       username: req.body.username,
       password: hash,
+      isbool: Boolean(false),
     };
 
     db_connect.collection("user").insertOne(new_obj, function (err, res) {
@@ -121,19 +165,8 @@ recordRoutes.route("/connexion").post(function (req, response) {
   });
 });
 recordRoutes.route("/connexion/verification").post(function (req, response) {
-  //const user = await User.findOne({ username: username });
-
-  //res.status(200).json({ username: username });
   const username = req.headers.username;
-  //const data = req.body.data;
 
-  /*if (!username) {
-    //response.status(401).send("Connecte toi first");
-    return response.status(200).send({
-      message: "Connecter vous d'abord!",
-    });
-  }*/
-  // console.log("user", req);
   const rounds = 1;
 
   let db_connect = dbo.getDb();
@@ -202,25 +235,58 @@ recordRoutes.route("/connexion/verification").post(function (req, response) {
   });
 });
 
-// This section will help you update a record by id.
+// This section will help you update a record by id...
 recordRoutes.route("/update/:id").post(function (req, response) {
-  let db_connect = dbo.getDb();
-  let myquery = { _id: ObjectId(req.params.id) };
-  let newvalues = {
-    $set: {
-      new_id: req.body.new_id,
-      name: req.body.name,
-      new_types: req.body.new_types,
-      new_image: req.body.new_image,
-    },
-  };
+  //let db_connect = dbo.getDb();
+  let UserId = req.params.id;
+  let db_connect = dbo.getDb("my_poke");
   db_connect
-    .collection("records")
-    .updateOne(myquery, newvalues, function (err, res) {
+    .collection("user")
+    .find({ _id: ObjectId(UserId) })
+    .toArray(function (err, result) {
       if (err) throw err;
-      console.log("1 document updated");
-      response.json(res);
+      //console.log("_id of userID:", result);
+      //console.log("_id :", result[0]._id);
+      //response.json(result);
+      //console.log("this is the results!!", result);
+      let myquery = { _id: ObjectId(result[0]._id) };
+      let newvalues = {
+        $set: {
+          isbool: Boolean(true),
+        },
+      };
+      db_connect
+        .collection("user")
+        .updateOne(myquery, newvalues, function (err, res) {
+          console.log("1 document updated , !!");
+          if (err) throw err;
+          response.json(res);
+        });
     });
+  //console.log("updating is bool");
+  /*db_connect
+    .collection("records")
+    .find({ UserId: ObjectId(UserId) })
+    .toArray(function (err, result) {
+      if (err) throw err;
+      console.log("_id of userID:", result);
+      console.log("_id :", result[0]._id);
+      response.json(result);
+      //console.log("this is the results!!", result);
+      let myquery = { _id: ObjectId(result[0]._id) };
+      let newvalues = {
+        $set: {
+          isbool: Boolean(true),
+        },
+      };
+      db_connect
+        .collection("records")
+        .updateOne(myquery, newvalues, function (err, res) {
+          if (err) throw err;
+          console.log("1 document updated , !!");
+          response.json(res);
+        });
+    });*/
 });
 
 // This section will help you delete a record

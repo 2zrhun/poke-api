@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 
 const Record = (props) => (
@@ -25,25 +26,32 @@ const Record = (props) => (
 export default function Pokedex() {
   const [records, setRecords] = useState([]);
   const [search, setSearch] = useState("");
+  const navigate = useNavigate();
+  const Mytoken = localStorage.getItem("Saved_Token");
+  const usId = localStorage.getItem("Saved_UserId");
 
   // This method fetches the records from the database.
   useEffect(() => {
-    async function getRecords() {
-      const response = await fetch(
-        `http://localhost:5000/record/${localStorage.getItem("Saved_UserId")}`
-      );
+    if (Mytoken == null && usId == null) {
+      //alert("Veuillez vous connecter ! ");
+      navigate("/connexion");
+    } else {
+      async function getRecords() {
+        const response = await fetch(
+          `http://localhost:5000/record/${localStorage.getItem("Saved_UserId")}`
+        );
 
-      if (!response.ok) {
-        const message = `An error occurred: ${response.statusText}`;
-        window.alert(message);
-        return;
+        if (!response.ok) {
+          const message = `An error occurred: ${response.statusText}`;
+          window.alert(message);
+          return;
+        }
+
+        const records = await response.json();
+        setRecords(records);
       }
-
-      const records = await response.json();
-      setRecords(records);
+      getRecords();
     }
-
-    getRecords();
 
     return;
   }, [records.length]);
@@ -58,80 +66,102 @@ export default function Pokedex() {
   }
 
   async function Fight() {
-    const response2 = await fetch("http://localhost:5000/getFight", {
-      method: "GET",
-    });
+    ChangeBollStatus();
+    const response2 = await fetch(
+      `http://localhost:5000/getFight/${localStorage.getItem("Saved_UserId")}`,
+      {
+        method: "GET",
+      }
+    );
     if (!response2.ok) {
       const message = `An error occurred: ${response2.statusText}`;
       window.alert(message);
       return;
     }
   }
-
-  function recordList() {
-    return records.map((record, index) => {
-      return (
-        <Record
-          record={record}
-          deleteRecord={() => deleteRecord(record._id)}
-          key={index}
-        />
-      );
-    });
+  async function ChangeBollStatus() {
+    const response3 = await fetch(
+      `http://localhost:5000/update/${localStorage.getItem("Saved_UserId")}`,
+      {
+        method: "POST",
+      }
+    );
+    if (!response3.ok) {
+      const message = `An error occurred: ${response3.statusText}`;
+      window.alert(message);
+      return;
+    }
   }
+  if (Mytoken == null && usId == null) {
+    //alert("Veuillez vous connecter ! ");
+    navigate("/connexion");
+  } else {
+    function recordList() {
+      return records.map((record, index) => {
+        return (
+          <Record
+            record={record}
+            deleteRecord={() => deleteRecord(record._id)}
+            key={index}
+          />
+        );
+      });
+    }
 
-  // This following section will display the table with the records of individuals.
-  return (
-    <div>
-      <h3>Record List - My pokedex</h3>
-      <input
-        type="text"
-        placeholder="rechercher avec NOM."
-        className="form-control"
-        onChange={(e) => {
-          setSearch(e.target.value);
-        }}
-      />
-      <button>Search</button>
+    // This following section will display the table with the records of individuals.
 
-      <table className="table table-striped" style={{ marginTop: 20 }}>
-        <tr key={records._id}>
-          {recordList()
-            .filter((val, i) => {
-              //console.log("test", val.props);
-              if (search === "") {
-                return val;
-              } else if (
-                val.props.record.name[0]
-                  .toLowerCase()
-                  .includes(search.toLowerCase())
-                //val.new_types.toLowerCase().includes(search.toLowerCase())
-              ) {
-                return val;
-              }
-            })
-            .map((note, indice) => (
-              <tr key={"notes-" + indice}>
-                <td>{note.props.record.new_id}</td>
-                <td>{note.props.record.name}</td>
-                <td>{note.props.record.new_types}</td>
-                <td>
-                  <img src={note.props.record.new_image} />
-                </td>
-                <button
-                  className="btn btn-link"
-                  onClick={() => {
-                    note.props.deleteRecord(note.props.record._id);
-                    //console.log("tess222", note.props.record._id);
-                  }}
-                >
-                  Delete
-                </button>
-              </tr>
-            ))}
-        </tr>
-        <button onClick={Fight}>Fight</button>
-      </table>
-    </div>
-  );
+    return (
+      <div>
+        <h3>Record List - My pokedex</h3>
+        <input
+          type="text"
+          placeholder="rechercher avec NOM."
+          className="form-control"
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
+        />
+        <button>Search</button>
+
+        <table className="table table-striped" style={{ marginTop: 20 }}>
+          <tr key={records._id}>
+            {recordList()
+              .filter((val, i) => {
+                //console.log("test", val.props);
+                if (search === "") {
+                  return val;
+                } else if (
+                  val.props.record.name[0]
+                    .toLowerCase()
+                    .includes(search.toLowerCase())
+                  //val.new_types.toLowerCase().includes(search.toLowerCase())
+                ) {
+                  return val;
+                }
+              })
+              .map((note, indice) => (
+                <tr key={"notes-" + indice}>
+                  <td>{note.props.record.new_id}</td>
+                  <td>{note.props.record.name}</td>
+                  <td>{note.props.record.new_types}</td>
+                  <td>
+                    <img src={note.props.record.new_image} />
+                  </td>
+                  <button
+                    className="btn btn-link"
+                    onClick={() => {
+                      note.props.deleteRecord(note.props.record._id);
+                      //console.log("tess222", note.props.record._id);
+                    }}
+                  >
+                    Delete
+                  </button>
+                </tr>
+              ))}
+          </tr>
+          <button onClick={Fight}>Fight</button>
+        </table>
+      </div>
+    );
+  }
 }

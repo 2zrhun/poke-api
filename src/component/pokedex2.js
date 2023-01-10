@@ -8,8 +8,11 @@ export default function Pokedex2(props) {
   const [piece, setPiece] = useState(4);
   const [Img, setImg] = useState("");
   const [Type, setType] = useState("");
+  const [Hp, setHp] = useState("");
+  const [Attack, setAttack] = useState("");
   const [chosedPoke, setChosedPoke] = useState("");
   const navigate = useNavigate();
+  const Mytoken = localStorage.getItem("Saved_Token");
 
   let url = "https://pokeapi.co/api/v2/pokemon/";
   useEffect(() => {
@@ -41,7 +44,10 @@ export default function Pokedex2(props) {
 
           let res = 0;
 
-          console.log(data.stats[0].base_stat);
+          console.log("HP ", data.stats[0].base_stat);
+          console.log("Attack ", data.stats[1].base_stat);
+          setHp(data.stats[0].base_stat);
+          setAttack(data.stats[1].base_stat);
           for (i === 0; i < data.types.length; i++) {
             res = data.types[i].type.name;
 
@@ -82,6 +88,8 @@ export default function Pokedex2(props) {
           name: roundPoke.name,
           new_types: Type,
           new_image: Img,
+          hp: Hp,
+          attack: Attack,
         }),
       }
     ).catch((error) => {
@@ -90,40 +98,46 @@ export default function Pokedex2(props) {
     });
     alert("ajouter le prochain pokemon");
   };
+  if (Mytoken == null) {
+    //alert("Veuillez vous connecter ! ");
+    navigate("/connexion");
+  } else {
+    return (
+      <div>
+        <h2>Achetez un pokemon </h2>
+        <button id={1} onClick={getPokemon}>
+          Debloque un pokemon avec des pieces
+        </button>
+        <h5>{piece}</h5>
+        <h5>{console.log("username", Connexion.props)}</h5>
 
-  return (
-    <div>
-      <h2>Achetez un pokemon </h2>
-      <button id={1} onClick={getPokemon}>
-        Debloque un pokemon avec des pieces
-      </button>
-      <h5>{piece}</h5>
-      <h5>{console.log("username", Connexion.props)}</h5>
-
-      <ul>
-        <li>
-          <div className="row">
-            <div className="column">
-              <div className="card">
-                id#<b> {roundPoke.id}</b>
-                <img src={Img} alt="d" />
-                <img className="back" src="../image/download.png" />
-                <br></br>
-                {"name:"}
-                <b>{roundPoke.name}</b>
-                <br></br>
-                Type: <b>{Type}</b>
-                <br></br>
-                <p>{roundPoke.tableauAdded}</p>
-                {console.log(roundPoke)}
-                <button id={roundPoke.id} onClick={() => Test(roundPoke.id)}>
-                  Add To pokedex
-                </button>
+        <ul>
+          <li>
+            <div className="row">
+              <div className="column">
+                <div className="card">
+                  id#<b> {roundPoke.id}</b>
+                  <img src={Img} alt="d" />
+                  <img className="back" src="../image/download.png" />
+                  <br></br>
+                  {"name:"}
+                  <b>{roundPoke.name}</b>
+                  <br></br>
+                  Type: <b>{Type}</b>
+                  Attack:<b>{Attack}</b>
+                  Hp: <b>{Hp}</b>
+                  <br></br>
+                  <p>{roundPoke.tableauAdded}</p>
+                  {console.log(roundPoke)}
+                  <button id={roundPoke.id} onClick={() => Test(roundPoke.id)}>
+                    Add To pokedex
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        </li>
-      </ul>
-    </div>
-  );
+          </li>
+        </ul>
+      </div>
+    );
+  }
 }
