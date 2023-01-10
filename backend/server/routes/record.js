@@ -34,6 +34,8 @@ recordRoutes.route("/getFight/:id").get(function (req, res) {
     console.log("BOOL for matchmaking NAME : ", result.username);
     let mquery2 = { UserId: ObjectId(result._id) };
 
+    let matchmaker = new FifoMatchmaker(runGame, { checkInterval: 2000 });
+
     db_connect
       .collection("records")
       .find({ UserId: ObjectId(result._id) })
@@ -46,6 +48,10 @@ recordRoutes.route("/getFight/:id").get(function (req, res) {
 
     let player1 = { id: req.params.id };
     let player2 = { id: JSON.stringify(result._id) };
+
+    // Players join match queue
+    matchmaker.push(player1);
+    matchmaker.push(player2);
 
     let players = [];
     players.push(player1);
