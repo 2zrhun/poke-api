@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+import Axios from "axios";
 
 const Record = (props) => (
   <tr>
@@ -26,6 +27,8 @@ const Record = (props) => (
 export default function Pokedex() {
   const [records, setRecords] = useState([]);
   const [search, setSearch] = useState("");
+  const [adversaire, setAdversaire] = useState("");
+  const [AdversPokes, setAdversPokes] = useState([]);
   const navigate = useNavigate();
   const Mytoken = localStorage.getItem("Saved_Token");
   const usId = localStorage.getItem("Saved_UserId");
@@ -67,7 +70,7 @@ export default function Pokedex() {
 
   async function Fight() {
     ChangeBollStatus();
-    const response2 = await fetch(
+    /*const response2 = await fetch(
       `http://localhost:5000/getFight/${localStorage.getItem("Saved_UserId")}`,
       {
         method: "GET",
@@ -77,7 +80,16 @@ export default function Pokedex() {
       const message = `An error occurred: ${response2.statusText}`;
       window.alert(message);
       return;
-    }
+    }*/
+    Axios.get(
+      `http://localhost:5000/getFight/${localStorage.getItem("Saved_UserId")}`
+    ).then((response) => {
+      if (response.data.message) {
+        alert(response.data.message);
+        setAdversaire(response.data.adversaire);
+        setAdversPokes(response.data.allEnPokes);
+      }
+    });
   }
   async function ChangeBollStatus() {
     const response3 = await fetch(
@@ -113,6 +125,7 @@ export default function Pokedex() {
     return (
       <div>
         <h3>Record List - My pokedex</h3>
+        <h3>TON Adversaire {adversaire}</h3>
         <input
           type="text"
           placeholder="rechercher avec NOM."
@@ -161,6 +174,19 @@ export default function Pokedex() {
           </tr>
           <button onClick={Fight}>Fight</button>
         </table>
+        <div>
+          {AdversPokes.map((ad, index) => (
+            <tr key={"index-" + index}>
+              <td>{ad.new_id}</td>
+              <td>{ad.name}</td>
+              <td>{ad.new_types}</td>
+              <td>
+                <img src={ad.new_image} />
+              </td>
+            </tr>
+          ))}
+          {console.log("the adversaire", AdversPokes)}
+        </div>
       </div>
     );
   }

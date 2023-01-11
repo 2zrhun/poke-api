@@ -10,6 +10,8 @@ export default function Pokedex2(props) {
   const [Type, setType] = useState("");
   const [Hp, setHp] = useState("");
   const [Attack, setAttack] = useState("");
+  const [order, setorder] = useState("");
+  const [defense, setDefense] = useState("");
   const [chosedPoke, setChosedPoke] = useState("");
   const navigate = useNavigate();
   const Mytoken = localStorage.getItem("Saved_Token");
@@ -48,6 +50,8 @@ export default function Pokedex2(props) {
           console.log("Attack ", data.stats[1].base_stat);
           setHp(data.stats[0].base_stat);
           setAttack(data.stats[1].base_stat);
+          setorder(data.order);
+          setDefense(data.stats[2].base_stat);
           for (i === 0; i < data.types.length; i++) {
             res = data.types[i].type.name;
 
@@ -90,6 +94,8 @@ export default function Pokedex2(props) {
           new_image: Img,
           hp: Hp,
           attack: Attack,
+          order: order,
+          defense: defense,
         }),
       }
     ).catch((error) => {
@@ -126,6 +132,8 @@ export default function Pokedex2(props) {
                   Type: <b>{Type}</b>
                   Attack:<b>{Attack}</b>
                   Hp: <b>{Hp}</b>
+                  Order: <b>{order}</b>
+                  Defense: <b>{defense}</b>
                   <br></br>
                   <p>{roundPoke.tableauAdded}</p>
                   {console.log(roundPoke)}
