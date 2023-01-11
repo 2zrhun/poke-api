@@ -17,9 +17,6 @@ const dbo2 = require("../db/conn2");
 // This help convert the id from string to ObjectId for the _id.
 const ObjectId = require("mongodb").ObjectId;
 /////////////
-/*recordRoutes.route("/firstsave").get(function (req, res) {
-  const first_saved = new dbo({ id: id, name: name, types: types });
-});*/
 
 const { FifoMatchmaker } = require("matchmaking");
 const matchmaker = require("simple-matchmaker");
@@ -29,11 +26,33 @@ recordRoutes.route("/getFight/:id").get(async function (req, res) {
   let myId = req.params.id;
 
   let myquery = { isbool: true };
+  ////////////////////////////////
+
+  ///////////////////////////////
   const Us = db_connect.collection("user");
-  const user2 = await db_connect.collection("user").find({ isbool: true });
-  //console.log("THE US", user2);
+
+  const user2 = await db_connect
+    .collection("user")
+    .aggregate([{ $match: { isbool: true, _id: { $ne: ObjectId(myId) } } }])
+    .toArray();
+  //console.log("AGGREGATE", resg);
+  //
+  //{ $sample: { size: 2 } },
+  //console.log("AGGREGATE 2", user2.length);
+  let min = Math.ceil(1);
+  let max = Math.floor(user2.length);
+  let random_pokeid = [Math.floor(Math.random() * (max - min) + min)];
+  let i = 0;
+  //for (i == 0; i < user2.length; i++) {
+  console.log("random user", user2[random_pokeid]);
+  console.log("random username", user2[random_pokeid].username);
+  // }
   Us.findOne(
-    { isbool: true, _id: { $ne: ObjectId(myId) } },
+    {
+      isbool: true,
+      _id: { $ne: ObjectId(myId) },
+      username: user2[random_pokeid].username,
+    },
     function (err, result) {
       let player1 = { id: req.params.id };
       if (err) throw err;
@@ -86,7 +105,10 @@ recordRoutes.route("/getFight/:id").get(async function (req, res) {
                 orderPlayer1.push(res3[i].order);
                 defensePlayer1.push(res3[i].defense);
               }
+              //let ind = 0;
+
               console.log("HP 2", hpPlayer1);
+              console.log("hp player sum");
               console.log("ATTACK", AttackPlayer1);
               console.log("PUSHING EVERY order", orderPlayer1);
               console.log("PUSHING EVERY defense", defensePlayer1);
@@ -237,6 +259,7 @@ recordRoutes.route("/connexion").post(function (req, response) {
     username: req.body.username,
     password: req.body.password,
     isbool: Boolean(false),
+    piece: 4,
   };
   bcrypt.hash(myobj.password, rounds, (err, hash) => {
     if (err) {
@@ -249,6 +272,7 @@ recordRoutes.route("/connexion").post(function (req, response) {
       username: req.body.username,
       password: hash,
       isbool: Boolean(false),
+      piece: 4,
     };
 
     db_connect.collection("user").insertOne(new_obj, function (err, res) {
@@ -340,10 +364,7 @@ recordRoutes.route("/update/:id").post(function (req, response) {
     .find({ _id: ObjectId(UserId) })
     .toArray(function (err, result) {
       if (err) throw err;
-      //console.log("_id of userID:", result);
-      //console.log("_id :", result[0]._id);
-      //response.json(result);
-      //console.log("this is the results!!", result);
+
       let myquery = { _id: ObjectId(result[0]._id) };
       let newvalues = {
         $set: {
@@ -355,35 +376,67 @@ recordRoutes.route("/update/:id").post(function (req, response) {
         .updateOne(myquery, newvalues, function (err, res) {
           console.log("1 document updated , !!");
           if (err) throw err;
-          response.json(res);
+          //response.json(res);
         });
     });
-  //console.log("updating is bool");
-  /*db_connect
-    .collection("records")
-    .find({ UserId: ObjectId(UserId) })
+});
+/////////////////////////////////////////////////////
+recordRoutes.route("/updatefalse/:id").post(function (req, response) {
+  //let db_connect = dbo.getDb();
+  let UserId = req.params.id;
+  let db_connect = dbo.getDb("my_poke");
+  db_connect
+    .collection("user")
+    .find({ _id: ObjectId(UserId) })
     .toArray(function (err, result) {
       if (err) throw err;
-      console.log("_id of userID:", result);
-      console.log("_id :", result[0]._id);
-      response.json(result);
-      //console.log("this is the results!!", result);
+
       let myquery = { _id: ObjectId(result[0]._id) };
       let newvalues = {
         $set: {
-          isbool: Boolean(true),
+          isbool: Boolean(false),
         },
       };
       db_connect
-        .collection("records")
+        .collection("user")
         .updateOne(myquery, newvalues, function (err, res) {
-          if (err) throw err;
           console.log("1 document updated , !!");
+          if (err) throw err;
           response.json(res);
         });
-    });*/
+    });
 });
+////////////////////////////////////////////////////////////////
+recordRoutes.route("/updatepiece/:id").post(function (req, response) {
+  //let db_connect = dbo.getDb();
+  let UserId = req.params.id;
+  let db_connect = dbo.getDb("my_poke");
+  db_connect
+    .collection("user")
+    .find({ _id: ObjectId(UserId) })
+    .toArray(function (err, result) {
+      if (err) throw err;
 
+      let myquery = { _id: ObjectId(result[0]._id) };
+      console.log("piece", result[0].piece);
+      if (result[0].piece > 0) {
+        let newvalues = {
+          $set: {
+            piece: result[0].piece - 1,
+          },
+        };
+        db_connect
+          .collection("user")
+          .updateOne(myquery, newvalues, function (err, res) {
+            console.log("1 document updated , !!");
+            if (err) throw err;
+            response.json(res);
+          });
+      } else {
+        console.log("plus d argent ");
+      }
+    });
+});
 // This section will help you delete a record
 recordRoutes.route("/record/:id").delete((req, response) => {
   let db_connect = dbo.getDb();

@@ -28,6 +28,7 @@ export default function Pokedex2(props) {
   }, [url]);
 
   const getPokemon = (event) => {
+    ChangePiece();
     let nb_piece_btn = parseInt(event.currentTarget.id);
     let calcul_piece = piece - nb_piece_btn;
     setPiece(calcul_piece);
@@ -73,6 +74,21 @@ export default function Pokedex2(props) {
       );
     }
   };
+  async function ChangePiece() {
+    const response3 = await fetch(
+      `http://localhost:5000/updatepiece/${localStorage.getItem(
+        "Saved_UserId"
+      )}`,
+      {
+        method: "POST",
+      }
+    );
+    if (!response3.ok) {
+      const message = `An error occurred: ${response3.statusText}`;
+      window.alert(message);
+      return;
+    }
+  }
   const Test = async (id) => {
     var elt = this;
     console.log("test", Type);

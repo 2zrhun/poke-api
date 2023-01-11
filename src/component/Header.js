@@ -4,14 +4,29 @@ import "../style/Header.css";
 import Axios from "axios";
 
 export default function Header() {
-  function LogOut() {
+  async function LogOut() {
+    const response3 = await fetch(
+      `http://localhost:5000/updatefalse/${localStorage.getItem(
+        "Saved_UserId"
+      )}`,
+      {
+        method: "POST",
+      }
+    );
+    if (!response3.ok) {
+      const message = `An error occurred: ${response3.statusText}`;
+      window.alert(message);
+      return;
+    }
     // const saved_token = JSON.stringify(response.data.token);
     localStorage.removeItem("Saved_Token");
     localStorage.removeItem("Saved_UserId");
+    localStorage.removeItem("Saved_Username");
     alert("Vous etes desormais deconnecte ! ");
     console.log("voici la reponse");
   }
   let nav_Poke = `pokedex2/${localStorage.getItem("Saved_UserId")}`;
+
   return (
     <div>
       <Navbar className="nvbar" bg="dark" variant="dark">
@@ -33,6 +48,8 @@ export default function Header() {
 
             <button onClick={LogOut}>Deconnexion</button>
           </Nav>
+          USERNAME:
+          {localStorage.getItem("Saved_Username")}
         </Container>
       </Navbar>
     </div>

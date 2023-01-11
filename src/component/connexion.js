@@ -6,7 +6,7 @@ import Axios from "axios";
 function Connexion() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [piece, setPiece] = useState("");
+  const [piece, setPiece] = useState(4);
 
   const [username2, setUsername2] = useState("");
   const [password2, setPassword2] = useState("");
@@ -36,6 +36,9 @@ function Connexion() {
 
         const saved_token = JSON.stringify(response.data.token);
         const saved_UserId = response.data.userId;
+        const username = response.data.username;
+        localStorage.setItem("Saved_Username", username);
+
         localStorage.setItem("Saved_Token", saved_token);
         localStorage.setItem("Saved_UserId", saved_UserId);
         console.log("voici la reponse", response.data.message);

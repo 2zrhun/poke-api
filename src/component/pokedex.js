@@ -120,7 +120,7 @@ export default function Pokedex() {
       });
     }
 
-    // This following section will display the table with the records of individuals.
+    //This following section will display the table with the records of individuals.
 
     return (
       <div>
