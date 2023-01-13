@@ -73,17 +73,7 @@ export default function Pokedex() {
 
   async function Fight() {
     ChangeBollStatus();
-    /*const response2 = await fetch(
-      `http://localhost:5000/getFight/${localStorage.getItem("Saved_UserId")}`,
-      {
-        method: "GET",
-      }
-    );
-    if (!response2.ok) {
-      const message = `An error occurred: ${response2.statusText}`;
-      window.alert(message);
-      return;
-    }*/
+
     Axios.get(
       `http://localhost:5000/getFight/${localStorage.getItem("Saved_UserId")}`
     ).then((response) => {
