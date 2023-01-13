@@ -119,52 +119,77 @@ recordRoutes.route("/getFight/:id").get(async function (req, res) {
               players.push(player2);
 
               function runGame(players) {
-                let PVperdus = 0;
-                console.log("Game started with:", players);
-                do {
-                  hpPlayer2[0] =
-                    ((orderPlayer2[0] * 0, 4 + 2) *
-                      AttackPlayer2[0] *
-                      1 *
-                      defensePlayer2[0]) /
-                      (defensePlayer1[0] * 1) +
-                    2;
+                //console.log("Game started with:", players);
 
-                  hpPlayer1[0] =
-                    ((orderPlayer1[0] * 0, 4 + 2) *
-                      AttackPlayer1[0] *
-                      1 *
-                      defensePlayer1[0]) /
-                      (defensePlayer2[0] * 1) +
-                    2;
-                  /////////////////////
-                  hpPlayer2[1] =
-                    ((orderPlayer2[1] * 0, 4 + 2) *
-                      AttackPlayer2[1] *
-                      1 *
-                      defensePlayer2[1]) /
-                      (defensePlayer1[1] * 1) +
-                    2;
-                  hpPlayer1[1] =
-                    ((orderPlayer1[1] * 0, 4 + 2) *
-                      AttackPlayer1[1] *
-                      1 *
-                      defensePlayer1[1]) /
-                      (defensePlayer2[1] * 1) +
-                    2;
-                  let hp2tot = hpPlayer2[0] + hpPlayer2[1];
-                } while ((hpPlayer1[0] && hpPlayer1[1]) <= 0 || (hpPlayer2[0] && hpPlayer2[1] <= 0));
-                {
-                  return res.status(200).send({
-                    message: "YOU won!",
-                    adversaire: result.username,
-                    allEnPokes: result2,
-                  });
-                  console.log("The game is over ");
+                let startingPlayer =
+                  players[Math.floor(Math.random() * players.length)];
+                //console.log("players", players);
+                //console.log("startingPlayer", startingPlayer);
+
+                if (startingPlayer == player1) {
+                  console.log("player1 starts", player1);
+                  let i = 0;
+                  let FinalHpPlayer1 =
+                    hpPlayer1[0] + hpPlayer1[1] + hpPlayer1[2] + hpPlayer1[3];
+                  do {
+                    let Pvperdu1 =
+                      (((orderPlayer2[i] * 0.4 + 2) * AttackPlayer2[i]) /
+                        defensePlayer1[i]) *
+                        0.85 +
+                      1.7;
+
+                    let resultatHP1 = FinalHpPlayer1 - Pvperdu1;
+
+                    console.log("end match", resultatHP1);
+                    console.log("HPPLAYER", hpPlayer1[i]);
+                    console.log("defense", defensePlayer2[i]);
+                    console.log("attack", AttackPlayer2[i]);
+                    console.log("order", orderPlayer2[i]);
+                    console.log("Pvperdu1", Pvperdu1);
+                    if (Pvperdu1 >= hpPlayer1[i]) {
+                      hpPlayer1.splice(i, 1);
+                      AttackPlayer1.splice(i, 1);
+                      orderPlayer1.splice(i, 1);
+                      defensePlayer1.splice(i, 1);
+                    }
+                    console.log("spliced hp1", hpPlayer1);
+                  } while (hpPlayer1.length > 0 && hpPlayer2.length > 0);
+                }
+                if (startingPlayer == player2) {
+                  console.log("player2 starts", player2);
+                  let i = 0;
+                  let FinalHpPlayer2 =
+                    hpPlayer2[0] + hpPlayer2[1] + hpPlayer2[2] + hpPlayer2[3];
+
+                  do {
+                    let Pvperdu2 =
+                      (((orderPlayer2[i] * 0.4 + 2) * AttackPlayer2[i]) /
+                        defensePlayer1[i]) *
+                        0.85 +
+                      1.7;
+
+                    let resultatHP2 = FinalHpPlayer2 - Pvperdu2;
+
+                    if (Pvperdu2 >= hpPlayer2[i]) {
+                      hpPlayer2.splice(i, 1);
+                      AttackPlayer2.splice(i, 1);
+                      orderPlayer2.splice(i, 1);
+                      defensePlayer2.splice(i, 1);
+                    }
+                    console.log("end match", resultatHP2);
+                    console.log("splicedHP2", hpPlayer2);
+                  } while (hpPlayer2.length > 0 && hpPlayer1.length > 0);
                 }
 
-                console.log(player1, player2);
+                if (hpPlayer1.length == 0) {
+                  console.log("The winner is player1", player1);
+                  console.log("The loser is player2", player2);
+                } else {
+                  console.log("The winner is player2", player2);
+                  console.log("The loser is player1", player1);
+                }
               }
+
               function getPlayerKey(player1, player2) {
                 //console.log("the ids of players", player1.id, player2.id);
                 return player1.id, player2.id;
