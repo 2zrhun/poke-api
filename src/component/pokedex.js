@@ -29,6 +29,9 @@ export default function Pokedex() {
   const [search, setSearch] = useState("");
   const [adversaire, setAdversaire] = useState("");
   const [AdversPokes, setAdversPokes] = useState([]);
+  const [winner, setWinner] = useState("");
+  const [loser, setLoser] = useState("");
+  const [gain, setGain] = useState("");
   const navigate = useNavigate();
   const Mytoken = localStorage.getItem("Saved_Token");
   const usId = localStorage.getItem("Saved_UserId");
@@ -88,6 +91,9 @@ export default function Pokedex() {
         alert(response.data.message);
         setAdversaire(response.data.adversaire);
         setAdversPokes(response.data.allEnPokes);
+        setWinner(response.data.Winner);
+        setLoser(response.data.loser);
+        setGain(response.data.piece);
       }
     });
   }
@@ -126,6 +132,9 @@ export default function Pokedex() {
       <div>
         <h3>Record List - My pokedex</h3>
         <h3>TON Adversaire {adversaire}</h3>
+        <h3>
+          THE WINNER IS {winner} et Vous avez gagne {gain}
+        </h3>
         <input
           type="text"
           placeholder="rechercher avec NOM."
@@ -135,7 +144,6 @@ export default function Pokedex() {
           }}
         />
         <button>Search</button>
-
         <table className="table table-striped" style={{ marginTop: 20 }}>
           <tr key={records._id}>
             {recordList()

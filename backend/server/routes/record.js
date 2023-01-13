@@ -38,7 +38,7 @@ recordRoutes.route("/getFight/:id").get(async function (req, res) {
   //
   //{ $sample: { size: 2 } },
   //console.log("AGGREGATE 2", user2.length);
-  let min = Math.ceil(1);
+  let min = Math.ceil(0);
   let max = Math.floor(user2.length);
   let random_pokeid = [Math.floor(Math.random() * (max - min) + min)];
   let i = 0;
@@ -46,6 +46,7 @@ recordRoutes.route("/getFight/:id").get(async function (req, res) {
   console.log("random user", user2[random_pokeid]);
   console.log("random username", user2[random_pokeid].username);
   // }
+  //console.log("wwqq", user2);
   Us.findOne(
     {
       isbool: true,
@@ -107,82 +108,231 @@ recordRoutes.route("/getFight/:id").get(async function (req, res) {
               //let ind = 0;
 
               console.log("HP 2", hpPlayer1);
-              console.log("hp player sum");
+
               console.log("ATTACK", AttackPlayer1);
               console.log("PUSHING EVERY order", orderPlayer1);
               console.log("PUSHING EVERY defense", defensePlayer1);
-              let player2 = { id: JSON.stringify(result._id) };
+              let player2 = { id: result._id };
 
               let players = [];
               players.push(player1);
               players.push(player2);
 
               function runGame(players) {
-                let PVperdus = 0;
-                console.log("Game started with:", players);
+                //console.log("Game started with:", players);
+                //let min = Math.ceil(1);
+                //let max = Math.floor(players.length);
+                //let random_pokeid = [
+                //  Math.floor(Math.random() * (max - min) + min),
+                //];
                 let i = 0;
-                let x = 0;
-                for (i == 0; i < hpPlayer2.length; i++) {
-                  for (x == 0; i < hpPlayer1.length; i++) {
-                    console.log("im testing");
+                //for (i == 0; i < user2.length; i++) {
+                //console.log("starttab", players[random_pokeid]);
+                //console.log("starting players", players[random_pokeid]);
 
-                    hpPlayer2[0] =
-                      ((orderPlayer2[0] * 0, 4 + 2) *
-                        AttackPlayer2[0] *
-                        1 *
-                        defensePlayer2[0]) /
-                        (defensePlayer1[0] * 1) +
-                      2;
-                    if (hpPlayer2[0] > 0) {
-                      hpPlayer2.shift();
-                      console.log("tttttt", hpPlayer2);
-                    }
+                let startingPlayer =
+                  players[Math.floor(Math.random() * players.length)];
+                console.log("players", players);
+                console.log("startingPlayer", startingPlayer);
+
+                if (startingPlayer == player1) {
+                  console.log("player1 starts", player1);
+                  let sumhpPlayer1 = 0;
+
+                  for (let x = 0; x < hpPlayer1.length; x++) {
+                    sumhpPlayer1 += hpPlayer1[x];
                   }
-                }
-                /*do {
-                  hpPlayer2[0] =
-                    ((orderPlayer2[0] * 0, 4 + 2) *
-                      AttackPlayer2[0] *
-                      1 *
-                      defensePlayer2[0]) /
-                      (defensePlayer1[0] * 1) +
-                    2;
+                  console.log("the sumhpPlayer1m", sumhpPlayer1);
 
-                  hpPlayer1[0] =
-                    ((orderPlayer1[0] * 0, 4 + 2) *
-                      AttackPlayer1[0] *
-                      1 *
-                      defensePlayer1[0]) /
-                      (defensePlayer2[0] * 1) +
-                    2;
-                  /////////////////////
-                  hpPlayer2[1] =
-                    ((orderPlayer2[1] * 0, 4 + 2) *
-                      AttackPlayer2[1] *
-                      1 *
-                      defensePlayer2[1]) /
-                      (defensePlayer1[1] * 1) +
-                    2;
-                  hpPlayer1[1] =
-                    ((orderPlayer1[1] * 0, 4 + 2) *
-                      AttackPlayer1[1] *
-                      1 *
-                      defensePlayer1[1]) /
-                      (defensePlayer2[1] * 1) +
-                    2;
-                  let hp2tot = hpPlayer2[0] + hpPlayer2[1];
-                } while ((hpPlayer1[0] && hpPlayer1[1]) <= 0 || (hpPlayer2[0] && hpPlayer2[1] <= 0));*/
-                {
-                  return res.status(200).send({
-                    message: "YOU won!",
-                    adversaire: result.username,
-                    allEnPokes: result2,
-                  });
-                  console.log("The game is over ");
-                }
+                  let y = 0;
+                  let FinalHpPlayer1 = sumhpPlayer1;
+                  let resultatHP1 = 0;
+                  let sumPvperdus = 0;
+                  // do {
+                  for (
+                    y == 0;
+                    y in hpPlayer1 &&
+                    y in defensePlayer2 &&
+                    y in orderPlayer1 &&
+                    y in AttackPlayer1;
+                    y++
+                  ) {
+                    let Pvperdux =
+                      (((orderPlayer2[y] * 0.4 + 2) * AttackPlayer2[y]) /
+                        defensePlayer1[y]) *
+                        0.85 +
+                      1.7;
+                    sumPvperdus += Pvperdux;
 
-                console.log(player1, player2);
+                    console.log("tes for i1 ", Pvperdux);
+                    resultatHP1 = FinalHpPlayer1 - Pvperdux;
+                  }
+                  console.log("sum PVperdus", sumPvperdus);
+                  console.log("final res pl1", resultatHP1);
+
+                  let Pvperdu1 =
+                    (((orderPlayer2[i] * 0.4 + 2) * AttackPlayer2[i]) /
+                      defensePlayer1[i]) *
+                      0.85 +
+                    1.7;
+
+                  console.log("end match", resultatHP1);
+                  console.log("HPPLAYER", hpPlayer1[i]);
+                  console.log("defense", defensePlayer2[i]);
+                  console.log("attack", AttackPlayer2[i]);
+                  console.log("order", orderPlayer2[i]);
+                  console.log("Pvperdu1", Pvperdu1);
+                  if (Pvperdu1 >= hpPlayer1[i]) {
+                    hpPlayer1.splice(i, 1);
+                    AttackPlayer1.splice(i, 1);
+                    orderPlayer1.splice(i, 1);
+                    defensePlayer1.splice(i, 1);
+                  }
+                  console.log("spliced hp1", hpPlayer1);
+                  //} while (hpPlayer1.length > 0 && hpPlayer2.length > 0);
+                }
+                if (startingPlayer == player2) {
+                  console.log("player2 starts", player2);
+                  let i = 0;
+
+                  //let FinalHpPlayer2 = sumhpPlayer2;
+
+                  //do {
+                  ////////////////////////
+                  let sumhpPlayer2 = 0;
+
+                  for (let x = 0; x < hpPlayer2.length; x++) {
+                    sumhpPlayer2 += hpPlayer1[x];
+                  }
+                  let FinalHpPlayer2 = sumhpPlayer2;
+                  let z = 0;
+                  let resultatHP2 = 0;
+                  let sumPvperdus = 0;
+
+                  for (
+                    z == 0;
+                    z in hpPlayer2 &&
+                    z in defensePlayer1 &&
+                    z in orderPlayer2 &&
+                    z in AttackPlayer2;
+                    z++
+                  ) {
+                    let Pvperduz =
+                      (((orderPlayer1[z] * 0.4 + 2) * AttackPlayer1[z]) /
+                        defensePlayer2[z]) *
+                        0.85 +
+                      1.7;
+                    sumPvperdus += Pvperduz;
+
+                    console.log("tes for i2 ", Pvperduz);
+                    resultatHP2 = FinalHpPlayer2 - Pvperduz;
+                  }
+                  console.log("sum PVperdus", sumPvperdus);
+                  console.log("final res pl2", resultatHP2);
+                  ///////////////////////
+
+                  let Pvperdu2 =
+                    (((orderPlayer2[i] * 0.4 + 2) * AttackPlayer2[i]) /
+                      defensePlayer1[i]) *
+                      0.85 +
+                    1.7;
+
+                  resultatHP2 = FinalHpPlayer2 - Pvperdu2;
+
+                  if (Pvperdu2 >= hpPlayer2[i]) {
+                    hpPlayer2.splice(i, 1);
+                    AttackPlayer2.splice(i, 1);
+                    orderPlayer2.splice(i, 1);
+                    defensePlayer2.splice(i, 1);
+                  }
+                  console.log("end match", resultatHP2);
+                  console.log("splicedHP2", hpPlayer2);
+                  //} while (hpPlayer2.length > 0 && hpPlayer1.length > 0);
+                }
+                resultatHP2 = hpPlayer2;
+                resultatHP1 = hpPlayer1;
+
+                if (hpPlayer1 > hpPlayer2) {
+                  console.log("The winner is player1", player1);
+                  console.log("The loser is player2", player2);
+                  db_connect
+                    .collection("user")
+                    .findOne(
+                      { _id: ObjectId(player1.id) },
+                      function (err, resname) {
+                        if (err) throw err;
+                        console.log("rrr", resname);
+                        if (resname.piece >= 0) {
+                          let myquery = { _id: ObjectId(resname._id) };
+                          let newvalues = {
+                            $set: {
+                              piece: resname.piece + 1,
+                            },
+                          };
+                          db_connect
+                            .collection("user")
+                            .updateOne(myquery, newvalues, function (err, res) {
+                              console.log("1 document updated , !!");
+                              if (err) throw err;
+                              response.json(res);
+                            });
+                        } else {
+                          console.log("plus d argent ");
+                        }
+
+                        //console.log("this is the results!!", result);
+                        return res.status(200).send({
+                          message: "GAME STARTED",
+                          adversaire: result.username,
+                          allEnPokes: result2,
+                          Winner: resname.username,
+                          loser: player1,
+                          piece: 1,
+                        });
+                      }
+                    );
+                } else {
+                  console.log("The winner is player2", player2.id);
+                  console.log("The loser is player1", player1);
+                  console.log("getting player name", player2.username);
+                  db_connect
+                    .collection("user")
+                    .findOne(
+                      { _id: ObjectId(player2.id) },
+                      function (err, resname) {
+                        if (err) throw err;
+                        console.log("rrr", resname);
+                        //console.log("this is the results!!", result);
+                        let myquery = { _id: ObjectId(resname._id) };
+                        if (resname.piece >= 0) {
+                          let newvalues = {
+                            $set: {
+                              piece: resname.piece + 1,
+                            },
+                          };
+                          db_connect
+                            .collection("user")
+                            .updateOne(myquery, newvalues, function (err, res) {
+                              console.log("1 document updated , !!");
+                              if (err) throw err;
+                              console.log("doc has been changed", res);
+                            });
+                        } else {
+                          console.log("plus d argent ");
+                        }
+                        return res.status(200).send({
+                          message: "GAME STARTED",
+                          adversaire: result.username,
+                          allEnPokes: result2,
+                          Winner: resname.username,
+                          loser: player1,
+                          piece: 1,
+                        });
+                      }
+                    );
+                }
               }
+
               function getPlayerKey(player1, player2) {
                 //console.log("the ids of players", player1.id, player2.id);
                 return player1.id, player2.id;
@@ -191,21 +341,22 @@ recordRoutes.route("/getFight/:id").get(async function (req, res) {
                 runGame(players),
                 getPlayerKey(player1, player2)
               );
+
               //console.log("the constructor is working");
 
               let mm = new FifoMatchmaker(cnt, { checkInterval: 2000 });
               //mm.push(player1);
               // mm.push(player2);
               //console.log("MM:", mm);
+              /* {
+                return res.status(200).send({
+                  message: "GAME STARTED",
+                  adversaire: result.username,
+                  allEnPokes: result2,
+                });
+                console.log("The game is over ");
+              }*/
             });
-
-          /*return response.status(200).send({
-            message: "vous etes BIEN connecte !",
-            username: result.username,
-            token: token,
-            userId: result._id,
-          });*/
-          //console.log("mm.push:", mm.getKey);
         });
     }
   );
@@ -479,6 +630,38 @@ recordRoutes.route("/updatepiece/:id").post(function (req, response) {
       }
     });
 });
+////////////////////////////////////////////////////
+recordRoutes.route("/updatemorpiece").post(function (req, response) {
+  //let db_connect = dbo.getDb();
+  let username = req.body.username;
+  let db_connect = dbo.getDb("my_poke");
+  db_connect
+    .collection("user")
+    .find({ username: username })
+    .toArray(function (err, result) {
+      if (err) throw err;
+
+      let myquery = { _id: ObjectId(result[0]._id) };
+      console.log("piece", result[0].piece);
+      if (result[0].piece >= 0) {
+        let newvalues = {
+          $set: {
+            piece: result[0].piece + 1,
+          },
+        };
+        db_connect
+          .collection("user")
+          .updateOne(myquery, newvalues, function (err, res) {
+            console.log("1 document updated , !!");
+            if (err) throw err;
+            response.json(res);
+          });
+      } else {
+        console.log("apres gain UNE PIECE A ETE ajoute  ");
+      }
+    });
+});
+///////////////////////////////////////////////////
 // This section will help you delete a record
 recordRoutes.route("/record/:id").delete((req, response) => {
   let db_connect = dbo.getDb();
