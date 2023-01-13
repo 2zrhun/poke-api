@@ -389,8 +389,10 @@ recordRoutes.route("/update/:id").post(function (req, response) {
     .find({ _id: ObjectId(UserId) })
     .toArray(function (err, result) {
       if (err) throw err;
+      console.log("result.is", result);
 
       let myquery = { _id: ObjectId(result[0]._id) };
+
       let newvalues = {
         $set: {
           isbool: Boolean(true),
