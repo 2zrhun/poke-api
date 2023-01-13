@@ -45,7 +45,6 @@ function Connexion() {
         console.log("Voici son id ", response.data.userId);
       }
     });
-    setPiece("4");
   }
 
   return (

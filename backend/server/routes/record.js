@@ -274,7 +274,7 @@ recordRoutes.route("/getFight/:id").get(async function (req, res) {
                             .updateOne(myquery, newvalues, function (err, res) {
                               console.log("1 document updated , !!");
                               if (err) throw err;
-                              response.json(res);
+                              //response.json(res);
                             });
                         } else {
                           console.log("plus d argent ");
@@ -287,7 +287,7 @@ recordRoutes.route("/getFight/:id").get(async function (req, res) {
                           allEnPokes: result2,
                           Winner: resname.username,
                           loser: player1,
-                          piece: 1,
+                          piece: resname.piece,
                         });
                       }
                     );
@@ -326,7 +326,7 @@ recordRoutes.route("/getFight/:id").get(async function (req, res) {
                           allEnPokes: result2,
                           Winner: resname.username,
                           loser: player1,
-                          piece: 1,
+                          piece: resname.piece,
                         });
                       }
                     );
@@ -379,6 +379,24 @@ recordRoutes.route("/record/:id").get(function (req, res) {
     if (err) throw err;
     res.json(result);
   });*/
+});
+recordRoutes.route("/user/:id").get(function (req, res) {
+  let UserId = req.params.id;
+  let db_connect = dbo.getDb("my_poke");
+  console.log("poke parrr id", UserId);
+  db_connect
+    .collection("user")
+    .find({ _id: ObjectId(UserId) })
+    .toArray(function (err, result) {
+      if (err) throw err;
+      console.log("result", result);
+      return res.status(200).send({
+        message: "tes piece meuf !",
+
+        piece: result[0].piece,
+      });
+      //console.log("this is the results!!", result);
+    });
 });
 
 // This section will help you get a single record by id
@@ -583,6 +601,7 @@ recordRoutes.route("/updatefalse/:id").post(function (req, response) {
     .find({ _id: ObjectId(UserId) })
     .toArray(function (err, result) {
       if (err) throw err;
+      console.log("EEE", result);
 
       let myquery = { _id: ObjectId(result[0]._id) };
       let newvalues = {
@@ -622,8 +641,10 @@ recordRoutes.route("/updatepiece/:id").post(function (req, response) {
           .collection("user")
           .updateOne(myquery, newvalues, function (err, res) {
             console.log("1 document updated , !!");
+            return response.status(200).send({
+              piece: res.piece,
+            });
             if (err) throw err;
-            response.json(res);
           });
       } else {
         console.log("plus d argent ");

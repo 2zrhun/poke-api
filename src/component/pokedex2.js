@@ -14,6 +14,7 @@ export default function Pokedex2(props) {
   const [defense, setDefense] = useState("");
   const [name, setName] = useState("");
   const [Id, setId] = useState("");
+  const [pi, setPi] = useState(4);
   const [chosedPoke, setChosedPoke] = useState([]);
   const [add, setAdd] = useState("");
   const navigate = useNavigate();
@@ -29,8 +30,14 @@ export default function Pokedex2(props) {
       })
       .catch((err) => console.error(err));
   }, [url]);*/
-
-  const getPokemon = (event) => {
+  /**Axios.get(
+      `http://localhost:5000/getFight/${localStorage.getItem("Saved_UserId")}`
+    ).then((response) => {
+      if (response.data.message) {
+        alert(response.data.message);
+      }
+    }); */
+  async function getPokemon(event) {
     ChangePiece();
 
     let nb_piece_btn = parseInt(event.currentTarget.id);
@@ -40,7 +47,10 @@ export default function Pokedex2(props) {
     let max = Math.floor(1153);
     let random_pokeid = [Math.floor(Math.random() * (max - min) + min)];
     //do {
-    if (calcul_piece >= 0) {
+    GetPi();
+    console.log("gggg", pi);
+    console.log("mes kkk", pi - 1);
+    if (pi > 0) {
       fetch(`https://pokeapi.co/api/v2/pokemon/${random_pokeid}/`)
         .then((resultat) => resultat.json())
         .then((data) => {
@@ -51,8 +61,8 @@ export default function Pokedex2(props) {
 
           let res = 0;
 
-          console.log("HP ", data.stats[0].base_stat);
-          console.log("Attack ", data.stats[1].base_stat);
+          //console.log("HP ", data.stats[0].base_stat);
+          //console.log("Attack ", data.stats[1].base_stat);
 
           setHp(data.stats[0].base_stat);
           setAttack(data.stats[1].base_stat);
@@ -81,7 +91,7 @@ export default function Pokedex2(props) {
         "Votre equipe est maintenant formee, vous n' avez plus de piece pour acheter un autre pokemon !"
       );
     }
-  };
+  }
 
   async function ChangePiece() {
     const response3 = await fetch(
@@ -97,6 +107,17 @@ export default function Pokedex2(props) {
       window.alert(message);
       return;
     }
+  }
+  async function GetPi() {
+    Axios.get(
+      `http://localhost:5000/user/${localStorage.getItem("Saved_UserId")}`
+    ).then((response) => {
+      if (response.data.message) {
+        alert(response.data.message);
+        console.log("mes piece", response.data.piece);
+        setPi(response.data.piece);
+      }
+    });
   }
   const Test = async (id) => {
     var elt = this;
@@ -147,8 +168,8 @@ export default function Pokedex2(props) {
         <button id={1} onClick={getPokemon}>
           Debloque un pokemon avec des pieces
         </button>
-        <h5>{piece}</h5>
-        <h5>{console.log("username", Connexion.props)}</h5>
+
+        <h6>NEW PI:{pi}</h6>
 
         <ul>
           <li>
@@ -179,7 +200,6 @@ export default function Pokedex2(props) {
             </div>
           </li>
         </ul>
-        {console.log("the adversaire", roundPoke)}
       </div>
     );
   }

@@ -133,7 +133,8 @@ export default function Pokedex() {
         <h3>Record List - My pokedex</h3>
         <h3>TON Adversaire {adversaire}</h3>
         <h3>
-          THE WINNER IS {winner} et Vous avez gagne {gain}
+          THE WINNER IS {winner} et Vous avez gagne +1 Voici VOTRE GAIN MTN{" "}
+          {gain}
         </h3>
         <input
           type="text"
