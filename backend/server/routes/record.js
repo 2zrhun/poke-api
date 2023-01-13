@@ -16,7 +16,6 @@ const dbo2 = require("../db/conn2");
 
 // This help convert the id from string to ObjectId for the _id.
 const ObjectId = require("mongodb").ObjectId;
-/////////////
 
 const { FifoMatchmaker } = require("matchmaking");
 const matchmaker = require("simple-matchmaker");
@@ -121,7 +120,26 @@ recordRoutes.route("/getFight/:id").get(async function (req, res) {
               function runGame(players) {
                 let PVperdus = 0;
                 console.log("Game started with:", players);
-                do {
+                let i = 0;
+                let x = 0;
+                for (i == 0; i < hpPlayer2.length; i++) {
+                  for (x == 0; i < hpPlayer1.length; i++) {
+                    console.log("im testing");
+
+                    hpPlayer2[0] =
+                      ((orderPlayer2[0] * 0, 4 + 2) *
+                        AttackPlayer2[0] *
+                        1 *
+                        defensePlayer2[0]) /
+                        (defensePlayer1[0] * 1) +
+                      2;
+                    if (hpPlayer2[0] > 0) {
+                      hpPlayer2.shift();
+                      console.log("tttttt", hpPlayer2);
+                    }
+                  }
+                }
+                /*do {
                   hpPlayer2[0] =
                     ((orderPlayer2[0] * 0, 4 + 2) *
                       AttackPlayer2[0] *
@@ -153,7 +171,7 @@ recordRoutes.route("/getFight/:id").get(async function (req, res) {
                       (defensePlayer2[1] * 1) +
                     2;
                   let hp2tot = hpPlayer2[0] + hpPlayer2[1];
-                } while ((hpPlayer1[0] && hpPlayer1[1]) <= 0 || (hpPlayer2[0] && hpPlayer2[1] <= 0));
+                } while ((hpPlayer1[0] && hpPlayer1[1]) <= 0 || (hpPlayer2[0] && hpPlayer2[1] <= 0));*/
                 {
                   return res.status(200).send({
                     message: "YOU won!",
@@ -243,6 +261,8 @@ recordRoutes.route("/record/add/:id").post(function (req, response) {
     defense: req.body.defense,
   };
   console.log("the new", myobj.UserId);
+  //let db_connect = dbo.getDb("my_poke");
+
   db_connect.collection("records").insertOne(myobj, function (err, res) {
     if (err) throw err;
     response.json(res);
@@ -253,7 +273,6 @@ recordRoutes.route("/record/add/:id").post(function (req, response) {
 // This section will help you create a new record.
 recordRoutes.route("/connexion").post(function (req, response) {
   const rounds = 2;
-
   let db_connect = dbo.getDb();
   let myobj = {
     username: req.body.username,
@@ -261,26 +280,39 @@ recordRoutes.route("/connexion").post(function (req, response) {
     isbool: Boolean(false),
     piece: 4,
   };
-  bcrypt.hash(myobj.password, rounds, (err, hash) => {
-    if (err) {
-      console.error(err);
+  let username = { username: myobj.username };
+  db_connect.collection("user").findOne(username, function (err, result) {
+    if (err) throw err;
+    console.log("jai tr", result);
+    if (result) {
+      response.send({
+        code: 401,
+        message: "Username already chosen",
+      });
       return;
-    }
-    console.log("myBoolean", myobj.isbool);
-    console.log("voici le hashage ! ", hash);
-    let new_obj = {
-      username: req.body.username,
-      password: hash,
-      isbool: Boolean(false),
-      piece: 4,
-    };
+    } else {
+      bcrypt.hash(myobj.password, rounds, (err, hash) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        console.log("myBoolean", myobj.isbool);
+        console.log("voici le hashage ! ", hash);
+        let new_obj = {
+          username: req.body.username,
+          password: hash,
+          isbool: Boolean(false),
+          piece: 4,
+        };
 
-    db_connect.collection("user").insertOne(new_obj, function (err, res) {
-      if (err) throw err;
-      response.send({ message: "User successfully created and saved !" });
-      // response.json(res);
-      console.log("il ya une erreur... ", err);
-    });
+        db_connect.collection("user").insertOne(new_obj, function (err, res) {
+          if (err) throw err;
+          response.send({ message: "User successfully created and saved !" });
+          // response.json(res);
+          console.log("il ya une erreur... ", err);
+        });
+      });
+    }
   });
 });
 recordRoutes.route("/connexion/verification").post(function (req, response) {
@@ -308,46 +340,56 @@ recordRoutes.route("/connexion/verification").post(function (req, response) {
     const user = db_connect
       .collection("user")
       .findOne({ username: myobj.username }, function (err, result) {
-        console.log("GETING the Id", result._id);
+        console.log("GETING the Id", result);
         if (err) throw err;
-
-        if (myobj.username != result.username) {
-          response.send({ message: "wrong username/password combination !" });
-        }
-
-        bcrypt.compare(myobj.password, result.password, (err, res) => {
-          if (result.length > 0) {
-            response.send({ message: "You are successfully connected  !" });
-            console.log("l'utilisateur existe ");
-          }
-
-          if (err) {
-            console.error(err);
-            return;
-          }
-          const token = jwt.sign(
-            {
-              username: result.username,
-              password: result.password,
-            },
-            JWT_SECRET_CODE,
-            { expiresIn: "24h" }
-          );
-          if (res == true) {
-            console.log("Vous etes connecte !", token);
-            return response.status(200).send({
-              message: "vous etes BIEN connecte !",
-              username: result.username,
-              token: token,
-              userId: result._id,
-            });
-          }
-          if (res == false) {
+        if (result == null) {
+          response.send({
+            code: 401,
+            message: "Dont found this user in the database",
+          });
+          return;
+        } else {
+          if (myobj.username != result.username) {
             response.send({ message: "wrong username/password combination !" });
-            console.log("nom d'utilisateur ou mot de passe incorrect");
           }
-          console.log(res); //true or false
-        });
+
+          bcrypt.compare(myobj.password, result.password, (err, res) => {
+            if (result.length > 0) {
+              response.send({ message: "You are successfully connected  !" });
+              console.log("l'utilisateur existe ");
+            }
+
+            if (err) {
+              console.error(err);
+              return;
+            }
+            const token = jwt.sign(
+              {
+                username: result.username,
+                password: result.password,
+              },
+              JWT_SECRET_CODE,
+              { expiresIn: "24h" }
+            );
+            if (res == true) {
+              console.log("Vous etes connecte !", token);
+              return response.status(200).send({
+                message: "vous etes BIEN connecte !",
+                username: result.username,
+                token: token,
+                userId: result._id,
+              });
+            }
+            if (res == false) {
+              response.send({
+                message: "wrong username/password combination !",
+              });
+              console.log("nom d'utilisateur ou mot de passe incorrect");
+            }
+            console.log(res); //true or false
+            return;
+          });
+        }
       });
 
     //console.log("searched user", user);
