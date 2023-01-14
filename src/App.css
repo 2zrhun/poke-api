@@ -1,12 +1,11 @@
-html{
-    background-color: antiquewhite;
-}
+
 /*shinny*/
 .container {
     width: 100%;
     margin: 0 ;
     text-align: center;
     font-family: Arial, sans-serif;
+    background-color: #292B2F;
     }
     
     h2 {
@@ -45,8 +44,8 @@ html{
     
     .card {
     position: relative;
-    background-color: rgb(184, 174, 160);
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    
+    box-shadow: 0 6px 10px 0 #364043;
     transition: 0.3s;
     width: 300px;
     height: 400px;
@@ -55,6 +54,13 @@ html{
     flex-direction: column;
     align-items: center;
     cursor: pointer;
+    }
+    .card:hover{
+        box-shadow: 0 4px 8px 0 #3CB371;
+    background-repeat: no-repeat;
+    background-size:cover;
+    background-position: center;
+    transition: 0.5s ease-in-out;
     }
     
     .card img {
@@ -69,7 +75,7 @@ html{
     .card p {
     font-size: 1.5em;
     font-weight: bold;
-    color: #00BFFF;
+    color: #3CB371;
     margin: 10px 0;
     backface-visibility: hidden;
     transition: 0.3s;
@@ -77,7 +83,7 @@ html{
     
     .card span {
     font-size: 1em;
-    color: #555;
+    color: #3CB371;
     margin-bottom: 20px;
     backface-visibility: hidden;
     transition: 0.3s;
@@ -85,13 +91,29 @@ html{
     
     .card .back {
     position: absolute;
-    background-image: url("./image/download.png");
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     backface-visibility: hidden;
     transform: rotateY(180deg);
+    }
+    .fire{
+      color: white;
+      border: #fff;
+      border-radius: 4px #fff solid;
+      background-color: red;
+
+    }
+    .grass{
+        background-color: green;
+        color: white;
+    }
+    .water{
+        background-color: #0080FF;
+    }
+    .bug{
+        color: #3CB371;
     }
     
     .card .back img {
@@ -105,7 +127,7 @@ html{
     }
     
     button {
-    background-color: #00BFFF;
+    background-color: #3CB371;
     color: #fff;
     font-size: 1em;
     padding: 10px 20px;
@@ -115,15 +137,73 @@ html{
     }
     
     button:hover {
-    background-color: #0080FF;
+    background-color: #1a422c;
     }
     
     .card:hover img {
-    box-shadow:#555 0 0 10px 5px ;
-    background-image: url("./image/download.png");
+    box-shadow:#f1f1f1 0 0 10px 5px ;
+    background-image: url("./image/images.png");
     background-position: center;
     }
     
     .card:hover p, .card:hover span {
     transform: rotateY(180deg)
     }
+
+    .pokefighters{
+        display: inline;
+        position: relative;
+        text-align: center;
+        justify-content: space-between;
+        margin: 10px 20px 15px 15px ;
+        margin-right: 90px;
+    }
+
+    .pokefighterss:hover{
+    box-shadow: 0px 1px 2px 0px #3CB371,
+    1px 2px 4px 0px #3CB371,
+    2px 4px 8px 0px #3CB371,
+    2px 4px 16px 0px#3CB371; 
+    border-radius: 6px;
+    background-position: center;
+        
+    }
+    #fightbtn{
+        position: relative;
+        justify-content: center;
+        text-align: center;
+        margin: 20px 630px ;
+    }
+
+    #h4{
+        color: white;
+    }
+
+    #searchbtn #search-bar{
+        position: relative;
+        justify-content: center;
+        text-align: center;
+        margin: 20px 630px ;
+    }
+
+    #next{
+        position: sticky;
+        justify-content: end;
+        margin-top: 45px;
+        margin-left: 80%;
+        margin-bottom: 0;
+        color: #243034;
+    }
+    #next:hover{
+        color: whitesmoke;
+    }
+    #previous{
+        position: sticky;
+        margin-right: 80%;
+        color: #243034;
+        
+    }
+    #previous:hover{
+        color: whitesmoke;
+    }
+    

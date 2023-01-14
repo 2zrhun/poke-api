@@ -1,27 +1,44 @@
+html{
+  background-color: #383a3e;
+}
 .nvbar {
-  background-color: #08728a;
+  color: transparent;
+  background-image: url("../image/Pokeball.png");
   position: relative;
   top: 0;
   left: 0;
   right: 0;
   z-index: 99;
-  display: flex;
+  display: block;
+  bottom: 50px;
   }
-  
   .nvbar .navbar-brand img {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   transition: all 0.3s ease;
+  
   }
   
   .nvbar .navbar-brand img:hover {
   transform: scale(1.1);
   }
-  
+  .nvbar .title{
+    display: inline;
+    font-size: 20px;
+    color: aliceblue;
+    margin: 0 10px;
+  }
+  .nvbar .title:hover{
+    color: #3CB371;
+  }
   .nvbar .nav {
   display: flex;
   align-items: center;
+  }
+  .nvbar .username{
+    color: #fff;
+    display: inline;
   }
   
   .nvbar .nav-link {
@@ -30,17 +47,20 @@
   font-weight: bold;
   padding: 10px 20px;
   transition: all 0.3s ease;
-  margin: 0 10px;
+  margin: 0 100px;
+  text-decoration: none;
   }
   
   .nvbar .nav-link:hover {
-  background-color: #f0492b;
-  color: #222222;
+  color: #3CB371;
+  box-shadow: #292B2F 4px;
+  transition: all 0.3s ease;
+  
   }
   
   @media (max-width: 768px) {
   .nvbar .nav-link {
-  display: none;
+  display: inline;
   }
   
   .nvbar .navbar-brand img {
@@ -51,7 +71,7 @@
   
   @media (min-width: 769px) {
   .nvbar .nav-link {
-  display: block;
+  display: inline;
   }
   
   .nvbar .navbar-brand img {
@@ -59,3 +79,37 @@
   height: 40px;
   }
   }
+  .drpbtn {
+    background-color: transparent;
+    color: white;
+    padding: 16px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .drpdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .drpdown-content {
+    display: none;
+    position: absolute;
+    background-color: #292B2F;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  .drpdown-content a {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .drpdown-content a:hover {color: #3CB371;}
+  
+  .drpdown:hover .drpdown-content {display: block;}
+  
+  .drpdown:hover .drpbtn {color: #3CB371; background-color:transparent;}

@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
-import { Navbar, Nav, Container, Button } from "react-bootstrap";
+import { Navbar, Nav, Container } from "react-bootstrap";
 import "../style/Header.css";
-import Axios from "axios";
-
+import logo from "../image/logo.jpg";
 export default function Header() {
   async function LogOut() {
     const response3 = await fetch(
@@ -29,29 +28,38 @@ export default function Header() {
 
   return (
     <div>
-      <Navbar className="nvbar" bg="dark" variant="dark">
+      <Navbar className="nvbar">
         <Container>
-          <Navbar.Brand href="#home">
-            <img src="../image/download.png" />
-          </Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link href={`/record/${localStorage.getItem("Saved_UserId")}`}>
-              Fight
-            </Nav.Link>
+            <Navbar.Brand>
+              <img src={logo} />
+            </Navbar.Brand>
+            <p className="title">PokeFighter</p>
+            <Nav.Link href="/pokemons">Pokemons</Nav.Link>
+
             <Nav.Link
               href={`/pokedex2/${localStorage.getItem("Saved_UserId")}`}
             >
               My pokedex2
             </Nav.Link>
+            <Nav.Link href={`/record/${localStorage.getItem("Saved_UserId")}`}>
+              Fight
+            </Nav.Link>
+            {/*putting this in a popup ??*/}
 
-            <Nav.Link href="/pokemons">Pokemons</Nav.Link>
-
-            <Nav.Link href="connexion">Connexion</Nav.Link>
-
-            <button onClick={LogOut}>Deconnexion</button>
+            <div className="drpdown">
+              <button className="drpbtn">Mon compte:</button>
+              <div className="drpdown-content">
+                <a href="/connexion">connexion</a>
+                <a href="/connexion">inscription</a>
+                <button onClick={LogOut}>Deconnexion</button>
+              </div>
+            </div>
+            <p className="username" color="white">
+              {" "}
+              <big>{localStorage.getItem("Saved_Username")}</big>
+            </p>
           </Nav>
-          USERNAME:
-          {localStorage.getItem("Saved_Username")}
         </Container>
       </Navbar>
     </div>

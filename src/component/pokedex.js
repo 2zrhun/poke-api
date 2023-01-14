@@ -120,9 +120,9 @@ export default function Pokedex() {
 
     return (
       <div>
-        <h3>Record List - My pokedex</h3>
-        <h3>TON Adversaire {adversaire}</h3>
-        <h3>
+        <h4 id="h4">TON Adversaire {adversaire}</h4>
+        {/*putting this in a popup*/}
+        <h3 id="#h3">
           THE WINNER IS {winner} et Vous avez gagne +1 Voici VOTRE GAIN MTN{" "}
           {gain}
         </h3>
@@ -134,8 +134,8 @@ export default function Pokedex() {
             setSearch(e.target.value);
           }}
         />
-        <button>Search</button>
-        <table className="table table-striped" style={{ marginTop: 20 }}>
+        <button id="searchbtn">Search</button>
+        <table id="search-bar" style={{ marginTop: 20 }}>
           <tr key={records._id}>
             {recordList()
               .filter((val, i) => {
@@ -151,38 +151,38 @@ export default function Pokedex() {
                   return val;
                 }
               })
+
               .map((note, indice) => (
-                <tr key={"notes-" + indice}>
-                  <td>{note.props.record.new_id}</td>
-                  <td>{note.props.record.name}</td>
-                  <td>{note.props.record.new_types}</td>
-                  <td>
-                    <img src={note.props.record.new_image} />
-                  </td>
-                  <button
-                    className="btn btn-link"
-                    onClick={() => {
-                      note.props.deleteRecord(note.props.record._id);
-                      //console.log("tess222", note.props.record._id);
-                    }}
-                  >
-                    Delete
-                  </button>
-                </tr>
+                <div className="pokefighters">
+                  <tr key={"notes-" + indice}>
+                    <div className="pokefighterss">
+                      <td>{note.props.record.new_id}</td>
+                      <td>{note.props.record.name}</td>
+                      <td>{note.props.record.new_types}</td>
+                      <td>
+                        <img src={note.props.record.new_image} />
+                      </td>
+                    </div>
+                  </tr>
+                </div>
               ))}
           </tr>
-          <button onClick={Fight}>Fight</button>
+          <button id="fightbtn" onClick={Fight}>
+            Fight
+          </button>
         </table>
-        <div>
+        <div className="pkefighters">
           {AdversPokes.map((ad, index) => (
-            <tr key={"index-" + index}>
-              <td>{ad.new_id}</td>
-              <td>{ad.name}</td>
-              <td>{ad.new_types}</td>
-              <td>
-                <img src={ad.new_image} />
-              </td>
-            </tr>
+            <div className="pokefighterss">
+              <tr key={"index-" + index}>
+                <td>{ad.new_id}</td>
+                <td>{ad.name}</td>
+                <td>{ad.new_types}</td>
+                <td>
+                  <img src={ad.new_image} />
+                </td>
+              </tr>
+            </div>
           ))}
           {console.log("the adversaire", AdversPokes)}
         </div>
@@ -190,3 +190,12 @@ export default function Pokedex() {
     );
   }
 }
+//<button
+//                    className="btn btn-link"
+//                    onClick={() => {
+//                      note.props.deleteRecord(note.props.record._id);
+//                      //console.log("tess222", note.props.record._id);
+//                    }}
+//                  >
+//                    // Delete //
+//                  </button>

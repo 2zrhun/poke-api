@@ -122,15 +122,9 @@ export default function Pokedex2(props) {
       return;
     });
     alert("ajouter le prochain pokemon");
-    let changebtn = document.getElementById("fightbtn");
 
-    changebtn.addEventListener("click", () => {
-      if (changebtn.innerHTML === "Fight") {
-        changebtn.innerHTML = "Replay";
-      }
-    });
-    event.currentTarget.textContent = "Replay";
-    event.currentTarget.innerHTML = "Replay";
+    //event.currentTarget.textContent = "Replay";
+    //event.currentTarget.innerHTML = "Replay";
     //document.getElementById("fightbtn").innerHTML = "Replay";
   }
 
@@ -200,7 +194,7 @@ export default function Pokedex2(props) {
     return (
       <div>
         <h2>Achetez un pokemon </h2>
-        <button id="fightbtn" class="btn btn-primary" onClick={getPokemon}>
+        <button class="btn btn-primary" onClick={getPokemon}>
           Debloque un pokemon avec des pieces
         </button>
 

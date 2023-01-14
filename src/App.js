@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import Pokedex from "./component/pokedex";
+import { FaArrowAltCircleRight, FaArrowAltCircleLeft } from "react-icons/fa";
 
 import "./App.css";
 
@@ -122,7 +122,32 @@ function App() {
 
   return (
     <div className="container">
-      <h2>Chose you pokemons</h2>
+      {url.next && (
+        <button id="next" onClick={next}>
+          <FaArrowAltCircleRight />
+        </button>
+      )}
+      <br></br>
+      <br></br>
+      {url.previous && (
+        <button id="previous" onClick={previous}>
+          {" "}
+          <FaArrowAltCircleLeft />
+        </button>
+      )}
+      {/*{url.next && (
+        <div onClick={next}>
+          <big>
+            <FaArrowAltCircleRight />
+          </big>
+        </div>
+      )}
+      {url.next && (
+        <div onClick={previous}>
+          <FaArrowAltCircleLeft />
+        </div>
+      )}*/}
+      <br />
       <ul>
         {pokemon.map(
           (pokemon1, i) => (
@@ -131,22 +156,18 @@ function App() {
               <div className="row">
                 <div className="column">
                   <div className="card">
-                    id#<b> {pokemon1.new_id}</b>
+                    nr°<b> {pokemon1.new_id}</b>
                     <img src={pokemon1.new_image} alt="dracafeu" />
                     <img className="back" src="../image/download.png" />
                     <br></br>
                     {"name:"}
                     <b>{pokemon1.name}</b>
                     <br></br>
-                    Type: <b>{JSON.stringify(pokemon1.new_types)}</b>
+                    <b id="type" className={pokemon1.new_types}>
+                      {JSON.stringify(pokemon1.new_types)}
+                    </b>
                     <br></br>
                   </div>
-                  <button
-                    id={pokemon1.new_id}
-                    onClick={() => Test(pokemon1.new_id)}
-                  >
-                    Add To pokedex
-                  </button>
                 </div>
               </div>
             </li>
@@ -157,8 +178,6 @@ function App() {
         {console.log("test !", pokemon2.id)}
       </ul>
 
-      {url.previous && <button onClick={previous}> Previous</button>}
-      {url.next && <button onClick={next}>next</button>}
       <br />
     </div>
   );

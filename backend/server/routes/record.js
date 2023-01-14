@@ -44,7 +44,7 @@ recordRoutes.route("/getFight/:id").get(async function (req, res) {
   let i = 0;
   //for (i == 0; i < user2.length; i++) {
   console.log("random user", user2[random_pokeid]);
-  console.log("random username", user2[random_pokeid].username);
+  //console.log("random username", user2[random_pokeid].username);
   // }
   //console.log("wwqq", user2);
   Us.findOne(
