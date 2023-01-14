@@ -30,6 +30,7 @@ export default function Pokedex2(props) {
       })
       .catch((err) => console.error(err));
   }, [url]);*/
+
   /**Axios.get(
       `http://localhost:5000/getFight/${localStorage.getItem("Saved_UserId")}`
     ).then((response) => {
@@ -39,6 +40,9 @@ export default function Pokedex2(props) {
     }); */
   async function getPokemon(event) {
     ChangePiece();
+    let btn = (document.querySelector("#fightbtn").innerHTML = "replay");
+
+    console.log("le boutton", btn);
 
     let nb_piece_btn = parseInt(event.currentTarget.id);
     let calcul_piece = piece - nb_piece_btn;
@@ -91,6 +95,43 @@ export default function Pokedex2(props) {
         "Votre equipe est maintenant formee, vous n' avez plus de piece pour acheter un autre pokemon !"
       );
     }
+
+    await fetch(
+      `http://localhost:5000/record/add/${localStorage.getItem(
+        "Saved_UserId"
+      )}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: localStorage.getItem("Saved_UserId"),
+          new_id: Id,
+          name: name,
+          new_types: Type,
+          new_image: Img,
+          hp: Hp,
+          attack: Attack,
+          order: order,
+          defense: defense,
+        }),
+      }
+    ).catch((error) => {
+      window.alert(error);
+      return;
+    });
+    alert("ajouter le prochain pokemon");
+    let changebtn = document.getElementById("fightbtn");
+
+    changebtn.addEventListener("click", () => {
+      if (changebtn.innerHTML === "Fight") {
+        changebtn.innerHTML = "Replay";
+      }
+    });
+    event.currentTarget.textContent = "Replay";
+    event.currentTarget.innerHTML = "Replay";
+    //document.getElementById("fightbtn").innerHTML = "Replay";
   }
 
   async function ChangePiece() {
@@ -108,6 +149,7 @@ export default function Pokedex2(props) {
       return;
     }
   }
+
   async function GetPi() {
     Axios.get(
       `http://localhost:5000/user/${localStorage.getItem("Saved_UserId")}`
@@ -121,7 +163,7 @@ export default function Pokedex2(props) {
   }
   const Test = async (id) => {
     var elt = this;
-    //console.log("test", Type);
+
     await fetch(
       `http://localhost:5000/record/add/${localStorage.getItem(
         "Saved_UserId"
@@ -150,14 +192,7 @@ export default function Pokedex2(props) {
     });
     alert("ajouter le prochain pokemon");
   };
-  function tt() {
-    let tmp = [...roundPoke];
-    tmp.push(roundPoke);
-    setChosedPoke(tmp);
-  }
-  const gt = () => {
-    tt();
-  };
+
   if (Mytoken == null) {
     //alert("Veuillez vous connecter ! ");
     navigate("/connexion");
@@ -165,7 +200,7 @@ export default function Pokedex2(props) {
     return (
       <div>
         <h2>Achetez un pokemon </h2>
-        <button id={1} onClick={getPokemon}>
+        <button id="fightbtn" class="btn btn-primary" onClick={getPokemon}>
           Debloque un pokemon avec des pieces
         </button>
 
@@ -190,9 +225,6 @@ export default function Pokedex2(props) {
                       <td>
                         <img src={ad.sprites.front_default} />
                       </td>
-                      <button id={ad.id} onClick={() => Test(ad.id)}>
-                        Add To pokedex
-                      </button>
                     </tr>
                   ))}
                 </div>
@@ -204,45 +236,3 @@ export default function Pokedex2(props) {
     );
   }
 }
-/**<div className="row">
-              <div className="column">
-                <div className="card">
-                  id#<b> {roundPoke.id}</b>
-                  <img src={Img} alt="d" />
-                  <img className="back" src="../image/download.png" />
-                  <br></br>
-                  {"name:"}
-                  <b>{roundPoke.name}</b>
-                  <br></br>
-                  Type: <b>{Type}</b>
-                  Attack:<b>{Attack}</b>
-                  Hp: <b>{Hp}</b>
-                  Order: <b>{order}</b>
-                  Defense: <b>{defense}</b>
-                  <br></br>
-                  <p>{roundPoke.tableauAdded}</p>
-                  <button id={roundPoke.id} onClick={() => Test(roundPoke.id)}>
-                    Add To pokedex
-                  </button>
-                </div>
-              </div>
-            </div> */
-/**<div>
-              {roundPoke.map((ad, index) => (
-                <tr key={"index-" + index}>
-                  <br></br>
-                  Type: <b>{Type}</b>
-                  Attack:<b>{Attack}</b>
-                  Hp: <b>{Hp}</b>
-                  Order: <b>{order}</b>
-                  Defense: <b>{defense}</b>
-                  <br></br>
-                  ID: <td>{ad.id}</td>
-                  NAME<td>{ad.name}</td>
-                  type:<td>{ad.Type}</td>
-                  <td>
-                    IMAGE: <img src={ad.new_image} />
-                  </td>
-                </tr>
-              ))}
-            </div> */

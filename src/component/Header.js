@@ -35,14 +35,16 @@ export default function Header() {
             <img src="../image/download.png" />
           </Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link href={`record/${localStorage.getItem("Saved_UserId")}`}>
+            <Nav.Link href={`/record/${localStorage.getItem("Saved_UserId")}`}>
               Fight
             </Nav.Link>
-            <Nav.Link href={`pokedex2/${localStorage.getItem("Saved_UserId")}`}>
+            <Nav.Link
+              href={`/pokedex2/${localStorage.getItem("Saved_UserId")}`}
+            >
               My pokedex2
             </Nav.Link>
 
-            <Nav.Link href="pokemons">Pokemons</Nav.Link>
+            <Nav.Link href="/pokemons">Pokemons</Nav.Link>
 
             <Nav.Link href="connexion">Connexion</Nav.Link>
 
