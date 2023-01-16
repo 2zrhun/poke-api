@@ -75,9 +75,10 @@ function Connexion() {
               }}
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicCheckbox">
-            <Form.Check type="checkbox" label="Check me out" />
-          </Form.Group>
+          <Form.Group
+            className="mb-3"
+            controlId="formBasicCheckbox"
+          ></Form.Group>
           <Button variant="primary" type="submit" onClick={Registre}>
             Submit
           </Button>
@@ -111,9 +112,10 @@ function Connexion() {
               }}
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicCheckbox">
-            <Form.Check type="checkbox" label="Check me out" />
-          </Form.Group>
+          <Form.Group
+            className="mb-3"
+            controlId="formBasicCheckbox"
+          ></Form.Group>
           <Button variant="primary" type="submit" onClick={getConnected}>
             Submit
           </Button>

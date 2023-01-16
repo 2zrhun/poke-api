@@ -39,7 +39,6 @@ export default function Pokedex() {
   // This method fetches the records from the database.
   useEffect(() => {
     if (Mytoken == null && usId == null) {
-      //alert("Veuillez vous connecter ! ");
       navigate("/connexion");
     } else {
       async function getRecords() {
@@ -120,10 +119,11 @@ export default function Pokedex() {
 
     return (
       <div>
-        <h4 id="h4">TON Adversaire {adversaire}</h4>
-        {/*putting this in a popup*/}
-        <h3 id="#h3">
-          THE WINNER IS {winner} et Vous avez gagne +1 Voici VOTRE GAIN MTN{" "}
+        <h4 id="h4">
+          Ton adversaire est <big> {adversaire}</big>
+        </h4>
+        <h3 id="h3">
+          Le gagnant est <big>{winner}</big> , a gagné +1 piece
         </h3>
         <input
           type="text"
@@ -138,14 +138,12 @@ export default function Pokedex() {
           <tr key={records._id}>
             {recordList()
               .filter((val, i) => {
-                //console.log("test", val.props);
                 if (search === "") {
                   return val;
                 } else if (
                   val.props.record.name[0]
                     .toLowerCase()
                     .includes(search.toLowerCase())
-                  //val.new_types.toLowerCase().includes(search.toLowerCase())
                 ) {
                   return val;
                 }
@@ -170,31 +168,22 @@ export default function Pokedex() {
             Fight
           </button>
         </table>
-        <div className="pkefighters">
-          {AdversPokes.map((ad, index) => (
-            <div className="pokefighterss">
-              <tr key={"index-" + index}>
+        {AdversPokes.map((ad, index) => (
+          <div className="pokefighters">
+            <tr key={"index-" + index}>
+              <div className="pokefighterss">
                 <td>{ad.new_id}</td>
                 <td>{ad.name}</td>
                 <td>{ad.new_types}</td>
                 <td>
                   <img src={ad.new_image} />
                 </td>
-              </tr>
-            </div>
-          ))}
-          {console.log("the adversaire", AdversPokes)}
-        </div>
+              </div>
+            </tr>
+          </div>
+        ))}
+        {console.log("the adversaire", AdversPokes)}
       </div>
     );
   }
 }
-//<button
-//                    className="btn btn-link"
-//                    onClick={() => {
-//                      note.props.deleteRecord(note.props.record._id);
-//                      //console.log("tess222", note.props.record._id);
-//                    }}
-//                  >
-//                    // Delete //
-//                  </button>

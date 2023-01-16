@@ -160,7 +160,7 @@
         margin-right: 90px;
     }
     .pokefighterss:hover .img{
-        box-shadow: 0px 1px 2px 0px #3CB371,
+    box-shadow: 0px 1px 2px 0px #3CB371,
     1px 2px 4px 0px #f1f1f1,
     2px 4px 8px 0px #f1f1f1,
     2px 4px 16px 0px#f1f1f1; 
@@ -188,6 +188,11 @@
 
     #h4{
         color: white;
+        margin-left: 37rem;
+    }
+    #h3{
+        color: white;
+        margin-left: 30.5rem;
     }
 
     #searchbtn #search-bar{
@@ -217,4 +222,17 @@
     #previous:hover{
         color: whitesmoke;
     }
-    
+    #h6{
+        margin-right: 0;
+        justify-content: center;
+        text-align: center;
+        color: white;
+    }
+    .btn{
+        margin-left: 36rem;
+    }
+    #stats{
+        margin-bottom: 0;
+        display: block;
+        position: end;
+    }

@@ -1,4 +1,3 @@
-import { Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { FaArrowAltCircleRight, FaArrowAltCircleLeft } from "react-icons/fa";
@@ -76,7 +75,6 @@ function App() {
           }
           let min = Math.ceil(1);
           let max = Math.floor(5);
-          //data.id = [Math.floor(Math.random() * (max - min) + min)];
           poke.new_id.push(data.id);
           poke.new_image.push(data.sprites.front_default);
         })
@@ -87,8 +85,6 @@ function App() {
   }, [pokemon]);
 
   const handleClick = (event) => {
-    //event.currentTarget.
-
     if (event.currentTarget.value == true) {
       let TableauAjouterPoke = [...selectedPokemon];
       TableauAjouterPoke.push(event.currentTarget);
@@ -118,7 +114,6 @@ function App() {
   };
   let min = Math.ceil(1);
   let max = Math.floor(5);
-  //setrandom_pokeid([Math.floor(Math.random() * (max - min) + min)]);
 
   return (
     <div className="container">
@@ -135,45 +130,31 @@ function App() {
           <FaArrowAltCircleLeft />
         </button>
       )}
-      {/*{url.next && (
-        <div onClick={next}>
-          <big>
-            <FaArrowAltCircleRight />
-          </big>
-        </div>
-      )}
-      {url.next && (
-        <div onClick={previous}>
-          <FaArrowAltCircleLeft />
-        </div>
-      )}*/}
+
       <br />
       <ul>
-        {pokemon.map(
-          (pokemon1, i) => (
-            <li key={i}>
-              {" "}
-              <div className="row">
-                <div className="column">
-                  <div className="card">
-                    nr°<b> {pokemon1.new_id}</b>
-                    <img src={pokemon1.new_image} alt="dracafeu" />
-                    <img className="back" src="../image/download.png" />
-                    <br></br>
-                    {"name:"}
-                    <b>{pokemon1.name}</b>
-                    <br></br>
-                    <b id="type" className={pokemon1.new_types}>
-                      {JSON.stringify(pokemon1.new_types)}
-                    </b>
-                    <br></br>
-                  </div>
+        {pokemon.map((pokemon1, i) => (
+          <li key={i}>
+            {" "}
+            <div className="row">
+              <div className="column">
+                <div className="card">
+                  nr°<b> {pokemon1.new_id}</b>
+                  <img src={pokemon1.new_image} alt="dracafeu" />
+                  <img className="back" src="../image/download.png" />
+                  <br></br>
+                  {"name:"}
+                  <b>{pokemon1.name}</b>
+                  <br></br>
+                  <b id="type" className={pokemon1.new_types}>
+                    {JSON.stringify(pokemon1.new_types)}
+                  </b>
+                  <br></br>
                 </div>
               </div>
-            </li>
-          )
-          //))
-        )}
+            </div>
+          </li>
+        ))}
 
         {console.log("test !", pokemon2.id)}
       </ul>

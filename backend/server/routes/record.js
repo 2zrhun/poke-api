@@ -17,9 +17,6 @@ const dbo2 = require("../db/conn2");
 // This help convert the id from string to ObjectId for the _id.
 const ObjectId = require("mongodb").ObjectId;
 
-const { FifoMatchmaker } = require("matchmaking");
-const matchmaker = require("simple-matchmaker");
-
 recordRoutes.route("/getFight/:id").get(async function (req, res) {
   let db_connect = dbo.getDb("my_poke");
   let myId = req.params.id;
@@ -34,19 +31,13 @@ recordRoutes.route("/getFight/:id").get(async function (req, res) {
     .collection("user")
     .aggregate([{ $match: { isbool: true, _id: { $ne: ObjectId(myId) } } }])
     .toArray();
-  //console.log("AGGREGATE", resg);
-  //
-  //{ $sample: { size: 2 } },
-  //console.log("AGGREGATE 2", user2.length);
+
   let min = Math.ceil(0);
   let max = Math.floor(user2.length);
   let random_pokeid = [Math.floor(Math.random() * (max - min) + min)];
   let i = 0;
-  //for (i == 0; i < user2.length; i++) {
   console.log("random user", user2[random_pokeid]);
-  //console.log("random username", user2[random_pokeid].username);
-  // }
-  //console.log("wwqq", user2);
+
   Us.findOne(
     {
       isbool: true,
@@ -84,15 +75,13 @@ recordRoutes.route("/getFight/:id").get(async function (req, res) {
           console.log("PUSHING EVERY Attack", AttackPlayer2);
           console.log("PUSHING EVERY order", orderPlayer2);
           console.log("PUSHING EVERY defense", defensePlayer2);
-          // console.log("ADVERSAIRE", result2);
-          // console.log("HP ADVERSAIRE", result2[0].hp);
+
           ///////////////////////////////////////////////////////////////////
           db_connect
             .collection("records")
             .find({ UserId: ObjectId(myId) })
             .toArray(function (err, res3) {
               if (err) throw err;
-              // res.json(result);
               let i = 0;
               let hpPlayer1 = [];
               let AttackPlayer1 = [];
@@ -105,7 +94,6 @@ recordRoutes.route("/getFight/:id").get(async function (req, res) {
                 orderPlayer1.push(res3[i].order);
                 defensePlayer1.push(res3[i].defense);
               }
-              //let ind = 0;
 
               console.log("HP 2", hpPlayer1);
 
@@ -119,16 +107,7 @@ recordRoutes.route("/getFight/:id").get(async function (req, res) {
               players.push(player2);
 
               function runGame(players) {
-                //console.log("Game started with:", players);
-                //let min = Math.ceil(1);
-                //let max = Math.floor(players.length);
-                //let random_pokeid = [
-                //  Math.floor(Math.random() * (max - min) + min),
-                //];
                 let i = 0;
-                //for (i == 0; i < user2.length; i++) {
-                //console.log("starttab", players[random_pokeid]);
-                //console.log("starting players", players[random_pokeid]);
 
                 let startingPlayer =
                   players[Math.floor(Math.random() * players.length)];
@@ -148,7 +127,6 @@ recordRoutes.route("/getFight/:id").get(async function (req, res) {
                   let FinalHpPlayer1 = sumhpPlayer1;
                   let resultatHP1 = 0;
                   let sumPvperdus = 0;
-                  // do {
                   for (
                     y == 0;
                     y in hpPlayer1 &&
@@ -189,16 +167,11 @@ recordRoutes.route("/getFight/:id").get(async function (req, res) {
                     defensePlayer1.splice(i, 1);
                   }
                   console.log("spliced hp1", hpPlayer1);
-                  //} while (hpPlayer1.length > 0 && hpPlayer2.length > 0);
                 }
                 if (startingPlayer == player2) {
                   console.log("player2 starts", player2);
                   let i = 0;
 
-                  //let FinalHpPlayer2 = sumhpPlayer2;
-
-                  //do {
-                  ////////////////////////
                   let sumhpPlayer2 = 0;
 
                   for (let x = 0; x < hpPlayer2.length; x++) {
@@ -247,7 +220,6 @@ recordRoutes.route("/getFight/:id").get(async function (req, res) {
                   }
                   console.log("end match", resultatHP2);
                   console.log("splicedHP2", hpPlayer2);
-                  //} while (hpPlayer2.length > 0 && hpPlayer1.length > 0);
                 }
                 resultatHP2 = hpPlayer2;
                 resultatHP1 = hpPlayer1;
@@ -274,13 +246,11 @@ recordRoutes.route("/getFight/:id").get(async function (req, res) {
                             .updateOne(myquery, newvalues, function (err, res) {
                               console.log("1 document updated , !!");
                               if (err) throw err;
-                              //response.json(res);
                             });
                         } else {
                           console.log("plus d argent ");
                         }
 
-                        //console.log("this is the results!!", result);
                         return res.status(200).send({
                           message: "GAME STARTED",
                           adversaire: result.username,
@@ -302,7 +272,6 @@ recordRoutes.route("/getFight/:id").get(async function (req, res) {
                       function (err, resname) {
                         if (err) throw err;
                         console.log("rrr", resname);
-                        //console.log("this is the results!!", result);
                         let myquery = { _id: ObjectId(resname._id) };
                         if (resname.piece >= 0) {
                           let newvalues = {
@@ -334,28 +303,12 @@ recordRoutes.route("/getFight/:id").get(async function (req, res) {
               }
 
               function getPlayerKey(player1, player2) {
-                //console.log("the ids of players", player1.id, player2.id);
                 return player1.id, player2.id;
               }
               let cnt = constructor(
                 runGame(players),
                 getPlayerKey(player1, player2)
               );
-
-              //console.log("the constructor is working");
-
-              let mm = new FifoMatchmaker(cnt, { checkInterval: 2000 });
-              //mm.push(player1);
-              // mm.push(player2);
-              //console.log("MM:", mm);
-              /* {
-                return res.status(200).send({
-                  message: "GAME STARTED",
-                  adversaire: result.username,
-                  allEnPokes: result2,
-                });
-                console.log("The game is over ");
-              }*/
             });
         });
     }
@@ -373,12 +326,7 @@ recordRoutes.route("/record/:id").get(function (req, res) {
     .toArray(function (err, result) {
       if (err) throw err;
       res.json(result);
-      //console.log("this is the results!!", result);
     });
-  /*db_connect.collection("records").findOne(UserId, function (err, result) {
-    if (err) throw err;
-    res.json(result);
-  });*/
 });
 recordRoutes.route("/user/:id").get(function (req, res) {
   let UserId = req.params.id;
@@ -395,13 +343,11 @@ recordRoutes.route("/user/:id").get(function (req, res) {
 
         piece: result[0].piece,
       });
-      //console.log("this is the results!!", result);
     });
 });
 
 // This section will help you get a single record by id
 recordRoutes.route("/recordd/:id").get(function (req, res) {
-  //<App />;
   let db_connect = dbo.getDb("my_poke");
   let myquery = { _id: ObjectId(req.params.id) };
   db_connect.collection("records").findOne(myquery, function (err, result) {
@@ -412,10 +358,7 @@ recordRoutes.route("/recordd/:id").get(function (req, res) {
 
 // This section will help you create a new record.
 recordRoutes.route("/record/add/:id").post(function (req, response) {
-  // <App />;
-  //const name=props.name
   let db_connect = dbo.getDb();
-  //let myquery = { _id: ObjectId(req.params.id) };
 
   let myobj = {
     UserId: ObjectId(req.params.id),
@@ -430,7 +373,6 @@ recordRoutes.route("/record/add/:id").post(function (req, response) {
     defense: req.body.defense,
   };
   console.log("the new", myobj.UserId);
-  //let db_connect = dbo.getDb("my_poke");
 
   db_connect.collection("records").insertOne(myobj, function (err, res) {
     if (err) throw err;
@@ -477,7 +419,6 @@ recordRoutes.route("/connexion").post(function (req, response) {
         db_connect.collection("user").insertOne(new_obj, function (err, res) {
           if (err) throw err;
           response.send({ message: "User successfully created and saved !" });
-          // response.json(res);
           console.log("il ya une erreur... ", err);
         });
       });
@@ -500,12 +441,10 @@ recordRoutes.route("/connexion/verification").post(function (req, response) {
       console.error(err);
       return;
     }
-    //console.log("hashage lors de la connexion ! ", hash);
     let new_obj = {
       username: req.body.username,
       password: hash,
     };
-    //console.log("recuperer ce qu il ya dans bdd", myobj);
     const user = db_connect
       .collection("user")
       .findOne({ username: myobj.username }, function (err, result) {
@@ -560,14 +499,11 @@ recordRoutes.route("/connexion/verification").post(function (req, response) {
           });
         }
       });
-
-    //console.log("searched user", user);
   });
 });
 
 // This section will help you update a record by id...
 recordRoutes.route("/update/:id").post(function (req, response) {
-  //let db_connect = dbo.getDb();
   let UserId = req.params.id;
   let db_connect = dbo.getDb("my_poke");
   db_connect
@@ -595,7 +531,6 @@ recordRoutes.route("/update/:id").post(function (req, response) {
 });
 /////////////////////////////////////////////////////
 recordRoutes.route("/updatefalse/:id").post(function (req, response) {
-  //let db_connect = dbo.getDb();
   let UserId = req.params.id;
   let db_connect = dbo.getDb("my_poke");
   db_connect

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import Connexion from "./connexion";
 import Axios from "axios";
+import "../App.css";
 
 export default function Pokedex2(props) {
   const [roundPoke, setRoundpoke] = useState([]);
@@ -15,8 +15,6 @@ export default function Pokedex2(props) {
   const [name, setName] = useState("");
   const [Id, setId] = useState("");
   const [pi, setPi] = useState(4);
-  const [chosedPoke, setChosedPoke] = useState([]);
-  const [add, setAdd] = useState("");
   const navigate = useNavigate();
   const Mytoken = localStorage.getItem("Saved_Token");
   const usId = localStorage.getItem("Saved_UserId");
@@ -24,17 +22,12 @@ export default function Pokedex2(props) {
   useEffect(() => {});
   async function getPokemon(event) {
     ChangePiece();
-    //let btn = (document.querySelector("#fightbtn").innerHTML = "replay");
-
-    //console.log("le boutton", btn);
-
     let nb_piece_btn = parseInt(event.currentTarget.id);
     let calcul_piece = piece - nb_piece_btn;
     setPiece(calcul_piece);
     let min = Math.ceil(1);
     let max = Math.floor(1153);
     let random_pokeid = [Math.floor(Math.random() * (max - min) + min)];
-    //do {
     GetPi();
     console.log("gggg", pi);
     console.log("mes kkk", pi - 1);
@@ -48,9 +41,6 @@ export default function Pokedex2(props) {
           let new_id = [];
 
           let res = 0;
-
-          //console.log("HP ", data.stats[0].base_stat);
-          //console.log("Attack ", data.stats[1].base_stat);
 
           setHp(data.stats[0].base_stat);
           setAttack(data.stats[1].base_stat);
@@ -68,7 +58,6 @@ export default function Pokedex2(props) {
 
           new_id.push(data.id);
           setImg(data.sprites.front_default);
-          //console.log("ooo", roundPoke);
         })
         .catch((err) => console.error(err));
 
@@ -106,10 +95,6 @@ export default function Pokedex2(props) {
       return;
     });
     alert("ajouter le prochain pokemon");
-
-    //event.currentTarget.textContent = "Replay";
-    //event.currentTarget.innerHTML = "Replay";
-    //document.getElementById("fightbtn").innerHTML = "Replay";
   }
 
   async function ChangePiece() {
@@ -152,7 +137,6 @@ export default function Pokedex2(props) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          //new_id: [roundPoke[id - 1].id],
           userId: localStorage.getItem("Saved_UserId"),
           new_id: Id,
           name: name,
@@ -177,12 +161,16 @@ export default function Pokedex2(props) {
   } else {
     return (
       <div>
-        <h2>Achetez un pokemon </h2>
-        <button class="btn btn-primary" onClick={getPokemon}>
-          Debloque un pokemon avec des pieces
+        <br></br>
+        <br></br>
+        <button class="btn" onClick={getPokemon}>
+          <big>achetez votre pokemon</big>
         </button>
 
-        <h6>NEW PI:{pi}</h6>
+        <big>
+          {" "}
+          <h6 id="h6">NEW PI:{pi}</h6>
+        </big>
 
         <ul>
           <li>
@@ -191,15 +179,21 @@ export default function Pokedex2(props) {
                 <div className="card">
                   {roundPoke.map((ad, index) => (
                     <tr key={"index-" + index}>
+                      <div id="stats">
+                        <br></br>
+                        Attack:<b>{ad.stats[1].base_stat}</b>
+                        Hp: <b>{ad.stats[0].base_stat}</b>
+                        Order: <b>{ad.order}</b>
+                        Defense: <b>{ad.stats[2].base_stat}</b>
+                      </div>
                       <br></br>
-                      Attack:<b>{ad.stats[1].base_stat}</b>
-                      Hp: <b>{ad.stats[0].base_stat}</b>
-                      Order: <b>{ad.order}</b>
-                      Defense: <b>{ad.stats[2].base_stat}</b>
+                      NR° <b> {ad.id}</b>
                       <br></br>
-                      ID: <td>{ad.id}</td>
-                      NAME<td>{ad.name}</td>
-                      type:<td>{ad.types[0].type.name}</td>
+                      NAME:
+                      <b>{ad.name}</b>
+                      <td>
+                        <b>{ad.types[0].type.name}</b>
+                      </td>
                       <td>
                         <img src={ad.sprites.front_default} />
                       </td>

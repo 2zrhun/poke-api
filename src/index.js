@@ -9,7 +9,6 @@ import Pokedex2 from "./component/pokedex2";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
-import RecordList from "./component/recordList";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

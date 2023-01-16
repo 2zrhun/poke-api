@@ -1,8 +1,6 @@
-import { Link } from "react-router-dom";
 import { Navbar, Nav, Container } from "react-bootstrap";
 import "../style/Header.css";
 import logo from "../image/logo.jpg";
-import { useNavigate } from "react-router";
 export default function Header() {
   const Mytoken = localStorage.getItem("Saved_Token");
   const usId = localStorage.getItem("Saved_UserId");
@@ -20,7 +18,6 @@ export default function Header() {
       window.alert(message);
       return;
     }
-    // const saved_token = JSON.stringify(response.data.token);
     localStorage.removeItem("Saved_Token");
     localStorage.removeItem("Saved_UserId");
     localStorage.removeItem("Saved_Username");
