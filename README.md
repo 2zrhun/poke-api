@@ -1,4 +1,5 @@
-# PokeFighter
+# PokeFighter 
+### Mina , Hamza , Paule.
 
 ## command line:
 git clone https://github.com/2zrhun/poke-api.git
