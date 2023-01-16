@@ -18,6 +18,7 @@ root.render(
       <Header />
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<Connexion />} />
           <Route
             path={`record/${localStorage.getItem("Saved_UserId")}`}
             element={<Pokedex />}

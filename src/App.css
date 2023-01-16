@@ -56,7 +56,7 @@
     cursor: pointer;
     }
     .card:hover{
-        box-shadow: 0 4px 8px 0 #3CB371;
+    box-shadow: 4px 6px 8px 4px #3CB371;
     background-repeat: no-repeat;
     background-size:cover;
     background-position: center;
@@ -128,7 +128,7 @@
     
     button {
     background-color: #3CB371;
-    color: #fff;
+    color: #000;
     font-size: 1em;
     padding: 10px 20px;
     border: none;
@@ -138,6 +138,7 @@
     
     button:hover {
     background-color: #1a422c;
+    color: #f1f1f1;
     }
     
     .card:hover img {
@@ -158,14 +159,24 @@
         margin: 10px 20px 15px 15px ;
         margin-right: 90px;
     }
+    .pokefighterss:hover .img{
+        box-shadow: 0px 1px 2px 0px #3CB371,
+    1px 2px 4px 0px #f1f1f1,
+    2px 4px 8px 0px #f1f1f1,
+    2px 4px 16px 0px#f1f1f1; 
+    border-radius: 50%;
+    transition: 0.5s ease-in-out;
+    }
 
     .pokefighterss:hover{
     box-shadow: 0px 1px 2px 0px #3CB371,
     1px 2px 4px 0px #3CB371,
     2px 4px 8px 0px #3CB371,
     2px 4px 16px 0px#3CB371; 
+    transition: 0.5s ease-in-out;
     border-radius: 6px;
     background-position: center;
+    color: #3CB371;
         
     }
     #fightbtn{

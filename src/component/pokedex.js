@@ -101,7 +101,7 @@ export default function Pokedex() {
     }
   }
   if (Mytoken == null && usId == null) {
-    //alert("Veuillez vous connecter ! ");
+    alert("Veuillez vous connecter ! ");
     navigate("/connexion");
   } else {
     function recordList() {
@@ -124,7 +124,6 @@ export default function Pokedex() {
         {/*putting this in a popup*/}
         <h3 id="#h3">
           THE WINNER IS {winner} et Vous avez gagne +1 Voici VOTRE GAIN MTN{" "}
-          {gain}
         </h3>
         <input
           type="text"

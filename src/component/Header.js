@@ -2,7 +2,10 @@ import { Link } from "react-router-dom";
 import { Navbar, Nav, Container } from "react-bootstrap";
 import "../style/Header.css";
 import logo from "../image/logo.jpg";
+import { useNavigate } from "react-router";
 export default function Header() {
+  const Mytoken = localStorage.getItem("Saved_Token");
+  const usId = localStorage.getItem("Saved_UserId");
   async function LogOut() {
     const response3 = await fetch(
       `http://localhost:5000/updatefalse/${localStorage.getItem(

@@ -5,9 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 function App2() {
   return (
     <div>
-      <Routes>
-        <Route path="/" element={<Pokedex />} />
-      </Routes>
+      <Routes></Routes>
     </div>
   );
 }

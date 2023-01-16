@@ -19,30 +19,14 @@ export default function Pokedex2(props) {
   const [add, setAdd] = useState("");
   const navigate = useNavigate();
   const Mytoken = localStorage.getItem("Saved_Token");
+  const usId = localStorage.getItem("Saved_UserId");
 
-  /* let url = "https://pokeapi.co/api/v2/pokemon/";
-  useEffect(() => {
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        //console.log(data.results);
-        setRoundpoke(data.results);
-      })
-      .catch((err) => console.error(err));
-  }, [url]);*/
-
-  /**Axios.get(
-      `http://localhost:5000/getFight/${localStorage.getItem("Saved_UserId")}`
-    ).then((response) => {
-      if (response.data.message) {
-        alert(response.data.message);
-      }
-    }); */
+  useEffect(() => {});
   async function getPokemon(event) {
     ChangePiece();
-    let btn = (document.querySelector("#fightbtn").innerHTML = "replay");
+    //let btn = (document.querySelector("#fightbtn").innerHTML = "replay");
 
-    console.log("le boutton", btn);
+    //console.log("le boutton", btn);
 
     let nb_piece_btn = parseInt(event.currentTarget.id);
     let calcul_piece = piece - nb_piece_btn;
@@ -187,8 +171,8 @@ export default function Pokedex2(props) {
     alert("ajouter le prochain pokemon");
   };
 
-  if (Mytoken == null) {
-    //alert("Veuillez vous connecter ! ");
+  if (Mytoken == null && usId == null) {
+    alert("Veuillez vous connecter ! ");
     navigate("/connexion");
   } else {
     return (
